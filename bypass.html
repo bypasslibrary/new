@@ -289,6 +289,33 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
     </div>
     <div class="messenger-desc">Браузер на сети TOR и тот самый браузер для DarkNet</div>
   </div>
+
+  <div class="messenger-item">
+    <img src="icontorbrowser.png">
+    <div class="messenger-left">
+      <div class="messenger-name">Outline</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Инструмент для подключения VPN</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="icontorbrowser.png">
+    <div class="messenger-left">
+      <div class="messenger-name">NekoBox</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Инструмент для подключения VPN</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="icontorbrowser.png">
+    <div class="messenger-left">
+      <div class="messenger-name">v2RayTun</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Инструмент для подключения VPN</div>
+  </div>
 </div>
 
 <div class="faq-section">
@@ -325,6 +352,7 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
       <a id="link-flathub" class="modal-link" href="#"><img src="flathub.png"></a>
       <a id="link-appgallery" class="modal-link" href="#"><img src="appgallery.png"></a>
       <a id="link-webapp" class="modal-link" href="#"><img src="webapp.png"></a>
+      <a id="link-download" class="modal-link" href="#" target="_blank">Скачать</a>
       <a id="link-snapstore" class="modal-link" href="#"><img src="snapstore.png"></a>
       <a id="link-offsite" class="modal-link" href="#" target="_blank">Офф сайт</a>
     </div>
@@ -358,7 +386,7 @@ const messengerLinks = {
     playmarket: "#",
     appstore: "#",
     microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
-    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#"
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#", download: "#"
   },
   "ByeByeDPI": {
     github: "https://github.com/romanvht/ByeByeDPI/releases",
@@ -366,84 +394,105 @@ const messengerLinks = {
     playmarket: "#",
     appstore: "#",
     microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
-    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#"
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#", download: "#"
   },
   "AmneziaVPN": {
     github: "https://github.com/amnezia-vpn/amnezia-client", fdroid: "#",
     playmarket: "https://play.google.com/store/apps/details?id=org.amnezia.vpn",
     appstore: "https://apps.apple.com/us/app/amneziavpn/id1600529900",
     microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
-    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "https://amnezia.org/"
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "https://amnezia.org/", download: "#"
   },
   "WGtunnel": {
     github: "https://github.com/wgtunnel/wgtunnel/releases", fdroid: "https://github.com/wgtunnel/fdroid?tab=readme-ov-file#apps",
     playmarket: "https://play.google.com/store/apps/details?id=com.zaneschepke.wireguardautotunnel",
     appstore: "#",
     microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
-    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "https://wgtunnel.com/download"
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "https://wgtunnel.com/download", download: "#"
   },
   "Portal WG": {
     github: "#", fdroid: "#",
     playmarket: "#",
     appstore: "#",
     microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
-    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#"
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#", download: "#"
   },
   "Hiddify": {
     github: "https://github.com/hiddify/hiddify-app/releases", fdroid: "#",
     playmarket: "https://play.google.com/store/apps/details?id=app.hiddify.com",
     appstore: "https://apps.apple.com/us/app/hiddify-proxy-vpn/id6596777532?platform=iphone",
     microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
-    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "https://hiddify.com/"
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "https://hiddify.com/", download: "#"
   },
   "Happ": {
     github: "#", fdroid: "#",
     playmarket: "https://play.google.com/store/apps/details?id=com.happproxy",
     appstore: "#",
     microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
-    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#"
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#", download: "#"
   },
   "VPN Proxy Master": {
     github: "#", fdroid: "#",
     playmarket: "https://play.google.com/store/apps/details?id=free.vpn.unblock.proxy.vpn.master.pro",
     appstore: "#",
     microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
-    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#"
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#", download: "#"
   },
   "Turbo VPN": {
     github: "#", fdroid: "#",
     playmarket: "https://play.google.com/store/apps/details?id=free.vpn.unblock.proxy.turbovpn",
     appstore: "#",
     microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
-    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#"
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#", download: "#"
   },
   "Now VPN": {
     github: "#", fdroid: "#",
     playmarket: "https://play.google.com/store/apps/details?id=com.now.vpn",
     appstore: "#",
     microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
-    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#"
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#", download: "#"
   },
   "InviZible Pro": {
     github: "https://github.com/Gedsh/InviZible/releases", fdroid: "https://f-droid.org/packages/pan.alexander.tordnscrypt.stable",
     playmarket: "#",
     appstore: "#",
     microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
-    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#"
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#", download: "#"
   },
   "Tor VPN": {
     github: "#", fdroid: "#",
     playmarket: "https://play.google.com/store/apps/details?id=org.torproject.vpn&pcampaignid=web_share",
     appstore: "№",
     microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
-    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#"
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#", download: "#"
   },
   "Tor Browser": {
     github: "#", fdroid: "#",
     playmarket: "https://play.google.com/store/apps/details?id=org.torproject.torbrowser",
     appstore: "#",
     microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
-    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#"
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#", download: "#"
+  },
+  "Outline": {
+    github: "#", fdroid: "#",
+    playmarket: "https://play.google.com/store/apps/details?id=org.torproject.torbrowser",
+    appstore: "#",
+    microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#", download: "#"
+  },
+  "NekoBox": {
+    github: "#", fdroid: "#",
+    playmarket: "https://play.google.com/store/apps/details?id=org.torproject.torbrowser",
+    appstore: "#",
+    microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#", download: "#"
+  },
+  "v2RayTun": {
+    github: "#", fdroid: "#",
+    playmarket: "https://play.google.com/store/apps/details?id=org.torproject.torbrowser",
+    appstore: "#",
+    microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "#", download: "#"
   }
   // остальные мессенджеры можно добавить аналогично
 };
@@ -477,5 +526,6 @@ document.querySelector('.modal-backdrop').addEventListener('click', ()=>{ downlo
 
 </body>
 </html>
+
 
 
