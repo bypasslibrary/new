@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Messenger</title>
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  background: linear-gradient(270deg,#7f00ff,#00c6ff,#7f00ff);
+  background-size: 600% 600%;
+  animation: neonFlow 14s ease infinite;
+  font-family: sans-serif;
+  scrollbar-width: none;
+}
+body::-webkit-scrollbar { width: 0 }
+
+canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: none; z-index: 0; }
+
+@keyframes neonFlow { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+.ui { display:flex; flex-direction:column; align-items:center; gap:42px; padding-top:25vh; position:relative; z-index:2; }
+.title { text-align:center; opacity:0; transform:translateY(30px); animation:fadeUp .9s ease forwards .2s; }
+.title .line1 { font-size:2.6rem; font-weight:700; color:#eaf2ff; text-shadow:0 0 18px rgba(120,180,255,.7); }
+.title .line2 { font-size:1.6rem; color:#bcd6ff; }
+
+.btn-row { display:flex; gap:28px; }
+.neon-btn {
+  padding:22px 56px;
+  font-size:1.4rem;
+  font-weight:600;
+  color:#e6f2ff;
+  background:rgba(20,30,60,.35);
+  border:2px solid rgba(120,180,255,.6);
+  border-radius:18px;
+  cursor:pointer;
+  backdrop-filter:blur(8px);
+  box-shadow:0 0 20px rgba(120,180,255,.4), inset 0 0 12px rgba(120,180,255,.25);
+  opacity:0;
+  transform:translateY(30px);
+  animation:fadeUp .9s ease forwards;
+}
+.neon-btn:nth-of-type(1){animation-delay:.6s}
+.neon-btn:nth-of-type(2){animation-delay:.8s}
+.neon-btn:hover { box-shadow:0 0 35px rgba(120,180,255,.85), inset 0 0 18px rgba(120,180,255,.45); }
+
+/* ===== МЕССЕНДЖЕРЫ ===== */
+.messengers-section { margin-top:160px; padding:80px 20px; background:rgba(0,0,0,.2); color:#eaf2ff; position:relative; z-index:3; }
+.messengers-section h2 { text-align:center; margin-bottom:50px; }
+.messenger-item { display:flex; align-items:center; gap:30px; max-width:1100px; margin:0 auto 35px; padding:25px; background:rgba(20,30,60,.35); border-radius:18px; backdrop-filter:blur(6px); }
+.messenger-item img { width:72px; height:72px; object-fit:contain; flex-shrink:0; }
+.messenger-left { min-width:180px; }
+.messenger-name { font-size:1.2rem; font-weight:600; margin-bottom:10px; }
+.download-btn { display:inline-block; padding:10px 22px; font-size:.95rem; color:#e6f2ff; border:2px solid rgba(120,180,255,.6); border-radius:12px; text-decoration:none; box-shadow:0 0 14px rgba(120,180,255,.35), inset 0 0 8px rgba(120,180,255,.25); }
+.download-btn:hover { box-shadow:0 0 28px rgba(120,180,255,.85), inset 0 0 12px rgba(120,180,255,.45); }
+.messenger-desc { color:#bcd6ff; font-size:1.05rem; line-height:1.5; }
+
+/* ===== FAQ ===== */
+.faq-section { padding:80px 20px; background:rgba(0,0,0,.2); text-align:center; color:#eaf2ff; position:relative; z-index:3; }
+.faq-question { font-size:1.2rem; font-weight:600; padding:12px 20px; background:rgba(20,30,60,.35); border-radius:12px; cursor:pointer; display:inline-block; margin-top:20px; }
+.faq-answer { max-height:0; overflow:hidden; transition:.4s; padding:0 20px; color:#bcd6ff; }
+
+/* ===== FOOTER ===== */
+.footer-note { text-align:center; font-size:.9rem; color:#bcd6ff; opacity:.75; padding:40px 20px 30px; position:relative; z-index:3; }
+.footer-note a { color:#eaf2ff; text-decoration:none; }
+
+/* ===== MOBILE FIX ===== */
+@media (max-width: 768px) {
+  .btn-row { flex-direction: column; align-items: center; width: 100%; }
+  .neon-btn { width: 90%; max-width: 340px; padding: 18px 0; }
+  .messenger-item { flex-direction: column; align-items: flex-start; }
+  .messenger-left { margin-bottom: 15px; }
+  .messenger-desc { width: 100%; font-size: 1rem; line-height: 1.6; }
+}
+
+@keyframes fadeUp { to {opacity:1;transform:none} }
+
+/* ===== МОДАЛЬНОЕ ОКНО ===== */
+#download-modal { display:none; position: fixed; inset: 0; z-index: 9999; }
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(6px); }
+.modal-content { position: absolute; top:50%; left:50%; transform: translate(-50%, -50%); background: rgba(20,30,60,0.9); border-radius: 18px; padding: 40px 20px; text-align:center; color:#eaf2ff; max-width: 400px; width: 90%; }
+.modal-content img { width: 72px; height:72px; object-fit: contain; margin-bottom: 16px; }
+#modal-name { font-size:1.4rem; font-weight:600; margin-bottom:12px; }
+.modal-text { font-size:1rem; margin-bottom:20px; }
+
+/* ===== ПЕРЕМЕННЫЕ ДЛЯ КНОПОК И ИКОНОК ===== */
+:root {
+  --market-btn-width: 110px;
+  --market-btn-height: 40px;
+  --market-icon-width: 110px;
+  --market-icon-height: 70px;
+
+  /* flex-позиционирование по умолчанию */
+  --market-icon-justify: center;
+  --market-icon-align: center;
+
+  /* цифровое смещение (по умолчанию центр) */
+  --market-icon-top: 50%;
+  --market-icon-left: 50%;
+}
+
+.modal-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.modal-link {
+  width: var(--market-btn-width);
+  height: var(--market-btn-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(20,30,60,.35);
+  border-radius: 14px;
+  border: 2px solid rgba(120,180,255,.6);
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(120,180,255,.4), inset 0 0 12px rgba(120,180,255,.25);
+  transition: .25s ease;
+  position: relative;
+
+  /* 🔥 Шрифт как у кнопки Закрыть */
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+  color: #e6f2ff;
+  text-decoration: none;
+}
+
+.modal-link:hover {
+  box-shadow: 0 0 32px rgba(120,180,255,.9), inset 0 0 16px rgba(120,180,255,.45);
+}
+
+.modal-link img {
+  width: var(--market-icon-width);
+  height: var(--market-icon-height);
+  object-fit: contain;
+  pointer-events: none;
+  position: absolute;
+  top: var(--market-icon-top);
+  left: var(--market-icon-left);
+  transform: translate(-50%, -50%);
+}
+
+/* Кнопка закрытия */
+.modal-close { padding: 10px 22px; font-size:1rem; color:#e6f2ff; border:2px solid rgba(120,180,255,.6); border-radius:12px; background:rgba(20,30,60,.35); cursor:pointer; }
+.modal-close:hover { box-shadow:0 0 28px rgba(120,180,255,.85), inset 0 0 12px rgba(120,180,255,.45); }
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="ui">
+  <div class="title">
+    <div class="line1">Messenger</div>
+    <div class="line2">Свобода общения без ограничений</div>
+  </div>
+
+  <div class="btn-row">
+    <button class="neon-btn" onclick="location.href='index.html'">На главную</button>
+    <button class="neon-btn" onclick="location.href='bypass.html'">Bypass</button>
+  </div>
+</div>
+
+<div class="messengers-section">
+  <h2>Мессенджеры</h2>
+
+  <div class="messenger-item">
+    <img src="iconstelegram.png">
+    <div class="messenger-left">
+      <div class="messenger-name">Telegram</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Быстрый облачный мессенджер с каналами, ботами и высокой устойчивостью к блокировкам.</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="iconssignal.png">
+    <div class="messenger-left">
+      <div class="messenger-name">Signal</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Максимально защищённый мессенджер с end-to-end шифрованием.</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="iconswhatsapp.png">
+    <div class="messenger-left">
+      <div class="messenger-name">WhatsApp</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Популярный мессенджер для личного общения и звонков.</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="icongemspace.png">
+    <div class="messenger-left">
+      <div class="messenger-name">Gem Space</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Современный мессенджер с каналами, звонками и устойчивостью к блокировкам.</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="iconimo.png">
+    <div class="messenger-left">
+      <div class="messenger-name">Imo</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Лёгкий мессенджер для чатов и видеозвонков.</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="iconbip.png">
+    <div class="messenger-left">
+      <div class="messenger-name">Bip</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Международный мессенджер с чатами и звонками.</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="iconjami.png">
+    <div class="messenger-left">
+      <div class="messenger-name">Jami</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Децентрализованный P2P-мессенджер без серверов.</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="iconbitchat.png">
+    <div class="messenger-left">
+      <div class="messenger-name">Bitchat</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Анонимный мессенджер для независимого общения.</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="iconzoom.png">
+    <div class="messenger-left">
+      <div class="messenger-name">Zoom</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Платформа для видеоконференций и удалённой работы.</div>
+  </div>
+</div>
+
+<div class="faq-section">
+  <h2>Часто задаваемые вопросы:</h2>
+
+  <div class="faq-question">Что делать, если не получается зайти на сайт для скачивания?</div>
+  <div class="faq-answer">Попробуйте зайти с VPN или подождите некоторое время — возможны технические работы.</div>
+
+  <div class="faq-question">Будет ли на сайте возможность скачать месенжер Max?</div>
+  <div class="faq-answer">Нет, его не было, нет и не будет!</div>
+</div>
+
+<div class="footer-note">
+  Нашли ошибку? Напишите: <a href="mailto:test@gmail.com">test@gmail.com</a>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО -->
+<div id="download-modal">
+  <div class="modal-backdrop"></div>
+  <div class="modal-content">
+    <img id="modal-icon" src="" alt="Иконка" />
+    <div id="modal-name"></div>
+    <div class="modal-text">Выберите источник для скачивания:</div>
+    <div class="modal-links">
+      <a id="link-github" class="modal-link" href="#"><img src="github.png"></a>
+      <a id="link-fdroid" class="modal-link" href="#"><img src="fdroid.png"></a>
+      <a id="link-playmarket" class="modal-link" href="#"><img src="playmarket.png"></a>
+      <a id="link-appstore" class="modal-link" href="#"><img src="appstore.png"></a>
+      <a id="link-microsoft" class="modal-link" href="#"><img src="microsoft.png"></a>
+      <a id="link-microsoftstore" class="modal-link" href="#"><img src="microsoftstore.png"></a>
+      <a id="link-galaxystore" class="modal-link" href="#"><img src="galaxystore.png"></a>
+      <a id="link-codeberg" class="modal-link" href="#"><img src="codeberg.png"></a>
+      <a id="link-amazonstore" class="modal-link" href="#"><img src="amazonstore.png"></a>
+      <a id="link-flathub" class="modal-link" href="#"><img src="flathub.png"></a>
+      <a id="link-appgallery" class="modal-link" href="#"><img src="appgallery.png"></a>
+      <a id="link-webapp" class="modal-link" href="#"><img src="webapp.png"></a>
+      <a id="link-snapstore" class="modal-link" href="#"><img src="snapstore.png"></a>
+      <a id="link-offsite" class="modal-link" href="#" target="_blank">Офф сайт</a>
+    </div>
+    <button class="modal-close">Закрыть</button>
+  </div>
+</div>
+
+<script>
+// ===== PARTICLES BACKGROUND =====
+const canvas=document.getElementById('particles');
+const ctx=canvas.getContext('2d');
+function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
+addEventListener('resize',resize); resize();
+const mouse={x:null,y:null,r:180};
+addEventListener('mousemove',e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
+addEventListener('mouseleave',()=>{ mouse.x=null; mouse.y=null; });
+const particles=[];
+for(let i=0;i<120;i++){ particles.push({ x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*2+.6, vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3, h:Math.random()*60+220 }); }
+(function draw(){ ctx.clearRect(0,0,canvas.width,canvas.height); if(mouse.x){ const g=ctx.createRadialGradient(mouse.x,mouse.y,0,mouse.x,mouse.y,mouse.r); g.addColorStop(0,'rgba(90,170,255,.25)'); g.addColorStop(.5,'rgba(90,170,255,.12)'); g.addColorStop(1,'rgba(90,170,255,0)'); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(mouse.x,mouse.y,mouse.r,0,Math.PI*2); ctx.fill(); } for(const p of particles){ p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>canvas.width)p.vx*=-1; if(p.y<0||p.y>canvas.height)p.vy*=-1; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle=`hsla(${p.h},100%,70%,.85)`; ctx.shadowBlur=16; ctx.shadowColor=`hsla(${p.h},100%,70%,1)`; ctx.fill(); } requestAnimationFrame(draw); })();
+
+// ===== FAQ =====
+document.querySelectorAll('.faq-question').forEach(q=>{ q.onclick=()=>{ const a=q.nextElementSibling; const open=a.style.maxHeight; a.style.maxHeight=open?null:a.scrollHeight+'px'; a.style.padding=open?'0 20px':'12px 20px'; }; });
+
+// ===== DOWNLOAD MODAL =====
+const downloadModal = document.getElementById('download-modal');
+
+const messengerLinks = {
+  "Telegram": {
+    github: "#",
+    fdroid: "#",
+    playmarket: "https://play.google.com/store/apps/details?id=org.telegram.messenger",
+    appstore: "https://apps.apple.com/app/telegram-messenger/id686449807",
+    microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "https://web.telegram.org/", snapstore: "#", offsite: "https://telegram.org/apps"
+  },
+  "Signal": {
+    github: "https://github.com/signalapp",
+    fdroid: "https://f-droid.org/packages/org.thoughtcrime.securesms/",
+    playmarket: "https://play.google.com/store/apps/details?id=org.thoughtcrime.securesms",
+    appstore: "https://apps.apple.com/us/app/signal-private-messenger/id874139669",
+    microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "https://signal.org/ru/download/"
+  },
+  "WhatsApp": {
+    github: "#",
+    fdroid: "#",
+    playmarket: "https://play.google.com/store/apps/details?id=com.whatsapp",
+    appstore: "https://apps.apple.com/us/app/whatsapp-messenger/id310633997",
+    microsoft: "#", microsoftstore: "https://get.microsoft.com/installer/download/9NKSQGP7F2NH?cid=website_cta_psi", galaxystore: "#", codeberg: "#",
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "https://web.whatsapp.com/", snapstore: "#", offsite: "https://www.whatsapp.com/download"
+  },
+  "Gem Space": {
+    github: "#", fdroid: "#",
+    playmarket: "https://play.google.com/store/apps/details?id=com.gemtechnologies.gem4me",
+    appstore: "https://apps.apple.com/us/app/online-messenger-gem-space/id1032387040",
+    microsoft: "#", microsoftstore: "#", galaxystore: "https://galaxystore.samsung.com/detail/com.gemtechnologies.gem4me", codeberg: "#",
+    amazonstore: "#", flathub: "#", appgallery: "https://appgallery.huawei.com/app/C102891939", webapp: "https://web.gemspace.com/", snapstore: "#", offsite: "https://gemspace.com/ru/product/bezopasnyy-korporativnyy-messendzher"
+  },
+  "Imo": {
+    github: "#", fdroid: "#",
+    playmarket: "https://play.google.com/store/apps/details?id=com.imo.android.imoim",
+    appstore: "https://apps.apple.com/sg/app/imo-international-calls-chat/id336435697",
+    microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "https://imo.im/log#android"
+  },
+  "Bip": {
+    github: "#", fdroid: "#",
+    playmarket: "hhttps://play.google.com/store/apps/details?id=com.turkcell.bip&hl=ru",
+    appstore: "https://apps.apple.com/tr/app/bip-mesajlaş-görüntülü-ara/id583274826?l=tr",
+    microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "https://bip.com/tr/indir"
+  },
+  "Jami": {
+    github: "https://git.jami.net/savoirfairelinux", fdroid: "https://f-droid.org/packages/cx.ring/",
+    playmarket: "https://play.google.com/store/apps/details?id=cx.ring",
+    appstore: "https://apps.apple.com/ca/app/jami/id1306951055",
+    microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "https://jami.net/ru/download-jami-android/"
+  },
+  "Bitchat": {
+    github: "https://github.com/permissionlesstech", fdroid: "#",
+    playmarket: "https://play.google.com/store/apps/details?id=com.bitchat.droid",
+    appstore: "https://apps.apple.com/us/app/bitchat-mesh/id6748219622",
+    microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "https://bitchat.free/"
+  },
+  "Zoom": {
+    github: "#", fdroid: "#",
+    playmarket: "https://play.google.com/store/apps/details?id=us.zoom.videomeetings",
+    appstore: "https://itunes.apple.com/us/app/id546505307",
+    microsoft: "#", microsoftstore: "#", galaxystore: "#", codeberg: "#",
+    amazonstore: "#", flathub: "#", appgallery: "#", webapp: "#", snapstore: "#", offsite: "https://zoom.us/download"
+  }
+  
+};
+
+// Обработка кнопок Download
+document.querySelectorAll('.download-btn').forEach(btn=>{
+  btn.addEventListener('click', e=>{
+    e.preventDefault();
+    const item = btn.closest('.messenger-item');
+    const icon = item.querySelector('img').src;
+    const name = item.querySelector('.messenger-name').textContent;
+
+    document.getElementById('modal-icon').src = icon;
+    document.getElementById('modal-name').textContent = name;
+
+    // Подставляем ссылки
+    const links = messengerLinks[name] || {};
+    for(let id in links){
+      const linkEl = document.getElementById('link-'+id);
+      if(linkEl) linkEl.href = links[id];
+    }
+
+    downloadModal.style.display='block';
+  });
+});
+
+// Закрытие модального окна
+document.querySelector('.modal-close').addEventListener('click', ()=>{ downloadModal.style.display='none'; });
+document.querySelector('.modal-backdrop').addEventListener('click', ()=>{ downloadModal.style.display='none'; });
+</script>
+
+</body>
+</html>
