@@ -125,7 +125,7 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
   transition: .25s ease;
   position: relative;
 
-  /* 🔥 Шрифт как у кнопки Закрыть */
+  /* Шрифт как у кнопки Закрыть */
   font-size: 1rem;
   font-weight: 500;
   font-family: inherit;
@@ -253,6 +253,15 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
     </div>
     <div class="messenger-desc">Платформа для видеоконференций и удалённой работы.</div>
   </div>
+
+  <div class="messenger-item">
+    <img src="iconelement.png">
+    <div class="messenger-left">
+      <div class="messenger-name">Element</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Защищенный мессенджер с открытым исходным кодом, работающий на децентрализованном протоколе Matrix</div>
+  </div>
 </div>
 
 <div class="faq-section">
@@ -331,7 +340,7 @@ const messengerLinks = {
     playmarket: "https://play.google.com/store/apps/details?id=org.thoughtcrime.securesms",
     appstore: "https://apps.apple.com/us/app/signal-private-messenger/id874139669",
     microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
-    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", offsite: "https://signal.org/ru/download/", download: ""
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", offsite: "https://signal.org/ru/download/", download: "https://github.com/signalapp/Signal-Android/releases/download/v7.68.5/Signal-Android-website-prod-universal-release-7.68.5.apk"
   },
   "WhatsApp": {
     github: "",
@@ -374,7 +383,14 @@ const messengerLinks = {
     playmarket: "https://play.google.com/store/apps/details?id=com.bitchat.droid",
     appstore: "https://apps.apple.com/us/app/bitchat-mesh/id6748219622",
     microsoft: "", microsoftstore: "#", galaxystore: "", codeberg: "",
-    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", offsite: "https://bitchat.free/", download: ""
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", offsite: "https://bitchat.free/", download: "https://github.com/permissionlesstech/bitchat-android/releases/download/1.5.1/bitchat-1.5.1.apk"
+  },
+  "Element": {
+    github: "https://github.com/element-hq", fdroid: "https://f-droid.org/packages/io.element.android.x",
+    playmarket: "https://play.google.com/store/apps/details?id=io.element.android.x",
+    appstore: "https://apps.apple.com/app/id1631335820",
+    microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", offsite: "https://element.io/download#linux", download: "https://github.com/element-hq/element-x-android/releases/download/v25.12.0/app-fdroid-arm64-v8a-release-signed.apk"
   },
   "Zoom": {
     github: "", fdroid: "",
@@ -415,6 +431,7 @@ document.querySelector('.modal-backdrop').addEventListener('click', ()=>{ downlo
 
 </body>
 </html>
+
 
 
 
