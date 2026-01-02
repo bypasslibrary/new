@@ -6,7 +6,7 @@
   <title>404 — ОШИБКА</title>
 
   <style>
-    /* ===== БАЗОВЫЕ НАСТРОЙКИ ===== */
+    
     * {
       box-sizing: border-box;
     }
@@ -22,7 +22,7 @@
       font-family: 'Courier New', monospace;
     }
 
-    /* ===== ФОНОВЫЕ ПОМЕХИ ===== */
+    
     .noise {
       position: fixed;
       inset: 0;
@@ -41,7 +41,7 @@
       100% { transform: translate(0,0); }
     }
 
-    /* ===== ОСНОВНОЙ КОНТЕЙНЕР ===== */
+    
     .wrapper {
       position: relative;
       z-index: 2;
@@ -53,7 +53,7 @@
       text-align: center;
     }
 
-    /* ===== ГЛИЧ-ТЕКСТ ===== */
+    
     .glitch {
       font-size: clamp(4rem, 12vw, 10rem);
       font-weight: bold;
@@ -104,7 +104,7 @@
       100% { transform: skew(2deg); }
     }
 
-    /* ===== ТЕКСТ ===== */
+    
     .subtitle {
       margin-top: 20px;
       font-size: 1.1rem;
@@ -113,7 +113,7 @@
       line-height: 1.5;
     }
 
-    /* ===== КНОПКА ===== */
+    
     .back-btn {
       margin-top: 40px;
       padding: 12px 28px;
@@ -134,7 +134,7 @@
       box-shadow: 0 0 15px rgba(255,255,255,0.25);
     }
 
-    /* ===== СКАНЛАЙНЫ ===== */
+    
     .scanlines {
       position: fixed;
       inset: 0;
@@ -149,7 +149,7 @@
       z-index: 4;
     }
 
-    /* ===== МЕРЦАНИЕ ===== */
+    
     @keyframes flicker {
       0% { opacity: 0.95; }
       50% { opacity: 0.85; }
@@ -163,7 +163,7 @@
 </head>
 <body>
 
-  <!-- Основной контент -->
+  
   <div class="wrapper">
     <div class="glitch" data-text="404">404</div>
     <div class="subtitle">
@@ -171,10 +171,10 @@
       Возможно, она никогда не существовала.
     </div>
 
-    <a href="/" class="back-btn">Вернуться</a>
+    <a href="https://bypasslibrary.github.io/new/" class="back-btn">Вернуться</a>
   </div>
 
-  <!-- Визуальные эффекты -->
+  
   <div class="noise"></div>
   <div class="scanlines"></div>
 
