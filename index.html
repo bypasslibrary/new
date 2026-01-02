@@ -281,13 +281,21 @@ function draw(){
 }
 draw();
 
-/* FAQ */
-const q=document.querySelector('.faq-question');
-const a=document.querySelector('.faq-answer');
-q.onclick=()=>{
-  a.style.maxHeight=a.style.maxHeight?null:a.scrollHeight+'px';
-  a.style.padding=a.style.maxHeight?'12px 20px':'0 20px';
-};
+/* FAQ — поддержка нескольких вопросов */
+document.querySelectorAll('.faq-question').forEach(q=>{
+  q.addEventListener('click',()=>{
+    const a = q.nextElementSibling;
+    if(!a) return;
+
+    if(a.style.maxHeight){
+      a.style.maxHeight = null;
+      a.style.padding = '0 20px';
+    } else {
+      a.style.maxHeight = a.scrollHeight + 'px';
+      a.style.padding = '12px 20px';
+    }
+  });
+});
 </script>
 </body>
 </html>
