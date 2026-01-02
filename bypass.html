@@ -508,12 +508,26 @@ document.querySelectorAll('.download-btn').forEach(btn=>{
     document.getElementById('modal-icon').src = icon;
     document.getElementById('modal-name').textContent = name;
 
-    // Подставляем ссылки
-    const links = messengerLinks[name] || {};
-    for(let id in links){
-      const linkEl = document.getElementById('link-'+id);
-      if(linkEl) linkEl.href = links[id];
-    }
+    // Подставляем ссылки + фильтр пустых
+const links = messengerLinks[name] || {};
+
+document.querySelectorAll('.modal-link').forEach(link => {
+  link.style.display = 'none'; // скрываем все по умолчанию
+  link.removeAttribute('href');
+});
+
+for (const id in links) {
+  const url = links[id];
+  const linkEl = document.getElementById('link-' + id);
+
+  if (!linkEl) continue;
+
+  // показываем только реальные ссылки
+  if (url && url !== '#' && url.trim() !== '') {
+    linkEl.href = url;
+    linkEl.style.display = 'flex';
+  }
+}
 
     downloadModal.style.display='block';
   });
@@ -526,6 +540,7 @@ document.querySelector('.modal-backdrop').addEventListener('click', ()=>{ downlo
 
 </body>
 </html>
+
 
 
 
