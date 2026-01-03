@@ -12,54 +12,40 @@ html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  min-height: 100vh;
   overflow-x: hidden;
-  background: #050505; /* Основной глубокий фон */
+  /* 
+     Решение: Мы добавляем больше темного пространства по краям 
+     и следим, чтобы первый и последний цвета были идентичны 
+  */
+  background: linear-gradient(270deg, 
+    #050505 0%, 
+    #050505 20%, 
+    #1a2a44 50%, 
+    #050505 80%, 
+    #050505 100%
+  );
+  background-size: 200% 200%; /* Уменьшение до 200% часто убирает артефакты растяжения */
+  animation: neonFlow 20s ease infinite;
   font-family: sans-serif;
   scrollbar-width: none;
+  background-attachment: fixed; /* Держит градиент на месте при скролле */
 }
 
-/* Создаем отдельный слой для свечения */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: -50%; /* Выносим за границы, чтобы не было видно краев */
-  width: 200%; /* Делаем шире экрана */
-  height: 100%;
-  /* Радиальный градиент намного мягче линейного и не дает резких стыков по бокам */
-  background: radial-gradient(
-    circle at center, 
-    #1a2a44 0%, 
-    #050505 40%, 
-    transparent 70%
-  );
-  /* Либо оставляем линейный, но с прозрачными краями: */
-  /* background: linear-gradient(90deg, transparent, #1a2a44, transparent); */
-  
-  animation: neonFlow 15s ease-in-out infinite;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.8; /* Можно регулировать яркость полосы */
-}
-
-@keyframes neonFlow {
-  0% {
-    transform: translateX(-30%);
-  }
-  50% {
-    transform: translateX(30%);
-  }
-  100% {
-    transform: translateX(-30%);
-  }
-}
+body::-webkit-scrollbar { width: 0 }
 
 canvas {
   position: fixed;
   inset: 0;
-  z-index: 0;
+  width: 100%;
+  height: 100vh;
   pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes neonFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .ui {
