@@ -7,28 +7,19 @@
 
   <link rel="icon" href="favicon.png" type="image/png">
 
+
 <style>
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
   overflow-x: hidden;
-  /* 
-     Решение: Мы добавляем больше темного пространства по краям 
-     и следим, чтобы первый и последний цвета были идентичны 
-  */
-  background: linear-gradient(270deg, 
-    #050505 0%, 
-    #050505 20%, 
-    #1a2a44 50%, 
-    #050505 80%, 
-    #050505 100%
-  );
-  background-size: 200% 200%; /* Уменьшение до 200% часто убирает артефакты растяжения */
-  animation: neonFlow 20s ease infinite;
+  /* Темные оттенки: глубокий индиго, темный синий и насыщенный фиолетовый */
+  background: linear-gradient(270deg, #050505, #000b1a, #0a0014);
+  background-size: 600% 600%;
+  animation: neonFlow 14s ease infinite;
   font-family: sans-serif;
   scrollbar-width: none;
-  background-attachment: fixed; /* Держит градиент на месте при скролле */
 }
 
 body::-webkit-scrollbar { width: 0 }
@@ -43,9 +34,9 @@ canvas {
 }
 
 @keyframes neonFlow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 
 .ui {
