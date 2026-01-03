@@ -6,7 +6,7 @@
   <title>666 — ОШИБКА</title>
 
   <style>
-    /* ===== БАЗОВЫЕ НАСТРОЙКИ ===== */
+    
     * { box-sizing: border-box; }
     html, body {
       margin: 0;
@@ -19,7 +19,7 @@
       font-family: 'Courier New', monospace;
     }
 
-    /* ===== ФОНОВЫЕ ПОМЕХИ ===== */
+    
     .noise {
       position: fixed;
       inset: 0;
@@ -37,7 +37,7 @@
       100% { transform: translate(0,0); }
     }
 
-    /* ===== ОСНОВНОЙ КОНТЕЙНЕР ===== */
+    
     .wrapper {
       position: relative;
       z-index: 2;
@@ -48,11 +48,11 @@
       justify-content: center;
       text-align: center;
 
-      /* переменные для тряски */
+      
       transform: translate(var(--shakeX,0), var(--shakeY,0)) rotate(var(--shakeRot,0));
     }
 
-    /* ===== ГЛИЧ-ТЕКСТ ===== */
+    
     .glitch {
       font-size: clamp(4rem, 12vw, 10rem);
       font-weight: bold;
@@ -77,10 +77,10 @@
     @keyframes glitchBottom { 0% { clip-path: inset(60% 0 0 0); } 50% { clip-path: inset(40% 0 10% 0); } 100% { clip-path: inset(50% 0 0 0); } }
     @keyframes glitchSkew { 0% { transform: skew(0deg); } 100% { transform: skew(2deg); } }
 
-    /* ===== ТЕКСТ ===== */
+    
     .subtitle { margin-top: 20px; font-size: 1.1rem; opacity: 0.8; max-width: 600px; line-height: 1.5; }
 
-    /* ===== КНОПКА ===== */
+    
     .back-btn {
       margin-top: 40px; padding: 12px 28px;
       border: 1px solid rgba(255,255,255,0.3);
@@ -91,29 +91,29 @@
     }
     .back-btn:hover { box-shadow: 0 0 15px rgba(255,255,255,0.25); background: rgba(255,255,255,0.1); }
 
-    /* ===== СКАНЛАЙНЫ ===== */
+    
     .scanlines {
       position: fixed; inset: 0;
       background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.03), rgba(255,255,255,0.03) 1px, transparent 1px, transparent 3px);
       pointer-events: none; z-index: 4;
     }
 
-    /* ===== МЕРЦАНИЕ ===== */
+    
     @keyframes flicker { 0% { opacity: 0.95; } 50% { opacity: 0.85; } 100% { opacity: 0.95; } }
     body { animation: flicker 3s infinite; }
 
-    /* ===== RGB РАЗЪЕЗД ===== */
+    
     .rgb-split { position: fixed; inset: 0; pointer-events: none; background: linear-gradient(transparent, transparent), linear-gradient(transparent, transparent); mix-blend-mode: screen; animation: rgbShift 1.5s infinite alternate; z-index: 5; }
     @keyframes rgbShift { 0% { filter: drop-shadow(2px 0 red) drop-shadow(-2px 0 cyan); } 100% { filter: drop-shadow(-3px 0 red) drop-shadow(3px 0 cyan); } }
 
-    /* ===== ГЛИЧ-ПОЛОСЫ ===== */
+    
     .glitch-bars { position: fixed; inset: 0; background: linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.05) 2%, transparent 4%); background-size: 100% 6px; animation: barsMove 0.4s infinite; pointer-events: none; z-index: 6; }
     @keyframes barsMove { from { background-position: 0 0; } to { background-position: 0 100%; } }
   </style>
 </head>
 <body>
 
-  <!-- Основной контент -->
+  
   <div class="wrapper">
     <div class="glitch" data-text="666">666</div>
     <div class="subtitle">
@@ -123,18 +123,18 @@
     <a href="/" class="back-btn">Вернуться</a>
   </div>
 
-  <!-- Визуальные эффекты -->
+  
   <div class="noise"></div>
   <div class="scanlines"></div>
   <div class="rgb-split"></div>
   <div class="glitch-bars"></div>
 
-  <!-- ===== JS: БЕСБЕСОНЕЧНАЯ ЭСКАЛИРУЮЩАЯ ТРЯСКА ===== -->
+  
   <script>
     let intensity = 1; // начальная сила тряски
 
     function updateShake() {
-      // создаём случайные смещения пропорционально интенсивности
+      
       const shakeX = (Math.random() - 0.5) * intensity * 2 + "px";
       const shakeY = (Math.random() - 0.5) * intensity * 2 + "px";
       const shakeRot = ((Math.random() - 0.5) * intensity * 0.5) + "deg";
