@@ -289,7 +289,16 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
       <div class="messenger-name">Tor Browser</div>
       <a class="download-btn" href="#">Download</a>
     </div>
-    <div class="messenger-desc">Браузер на сети TOR</div>
+    <div class="messenger-desc">Браузер на сети TOR для Android</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="icononionbrowser.png">
+    <div class="messenger-left">
+      <div class="messenger-name">Onion Browser</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Браузер на сети TOR для IPhone</div>
   </div>
 
   <div class="messenger-item">
@@ -483,7 +492,14 @@ const messengerLinks = {
     playmarket: "https://play.google.com/store/apps/details?id=org.torproject.torbrowser",
     appstore: "",
     microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
-    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", offsite: "https://www.torproject.org/", download: "https://github.com/bypasslibrary/new/releases/download/new/Tor.Browser.apk"
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", offsite: "https://www.torproject.org/download/", download: "https://github.com/bypasslibrary/new/releases/download/new/Tor.Browser.apk"
+  },
+  "Onion Browser": {
+    github: "https://github.com/OnionBrowser/OnionBrowser/releases", fdroid: "",
+    playmarket: "",
+    appstore: "https://apps.apple.com/us/app/onion-browser/id519296448",
+    microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", offsite: "https://onionbrowser.com/", download: ""
   },
   "Outline": {
     github: "", fdroid: "",
@@ -559,6 +575,7 @@ document.querySelector('.modal-backdrop').addEventListener('click', ()=>{ downlo
 
 </body>
 </html>
+
 
 
 
