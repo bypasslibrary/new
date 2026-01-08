@@ -149,6 +149,42 @@ video {
   color:#bcd6ff;
 }
 
+.telegram-bot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 30px 20px 10px;
+  text-align: center;
+
+  --glow-size: 13px;
+  --glow-power: 0.7;
+}
+
+.telegram-bot img {
+  width: 64px;
+  height: 64px;
+  filter:
+    drop-shadow(0 0 var(--glow-size)
+    rgba(120,180,255,var(--glow-power)));
+  transition: filter .3s ease;
+}
+
+.telegram-bot img:hover {
+  filter:
+    drop-shadow(0 0 calc(var(--glow-size) * 1.4)
+    rgba(120,180,255,1));
+}
+
+.telegram-bot a {
+  color: #eaf2ff;
+  font-weight: 600;
+  text-decoration: none;
+}
+.telegram-bot a:hover {
+  text-decoration: underline;
+}
+
 .footer-note {
   text-align:center;
   font-size:.9rem;
@@ -213,6 +249,15 @@ video {
       На сайте вы можете найти архиватор, который умеет открывать файлы таких форматов. Он находится внизу списков приложений.
     </div>
   </div>
+</div>
+
+<div class="telegram-bot">
+  <a href="https://t.me/bypasslibraryBot" target="_blank">
+    <img src="favicon.png" alt="Telegram Bot">
+  </a>
+  <a href="https://t.me/bypasslibraryBot" target="_blank">
+    @bypasslibraryBot
+  </a>
 </div>
 
 <div class="footer-note">
