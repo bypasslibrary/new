@@ -50,6 +50,36 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
 .neon-btn:nth-of-type(2){animation-delay:.8s}
 .neon-btn:hover { box-shadow:0 0 35px rgba(120,180,255,.85), inset 0 0 18px rgba(120,180,255,.45); }
 
+/* ===== ГИРЛЯНДА ===== */
+.garland {
+  position: fixed;
+  top: -5px;
+  left: 0;
+  width: 100%;
+  height: 160px;
+  pointer-events: none;
+  z-index:4; /* выше UI */
+}
+
+.garland svg { width: 100%; height: 100%; }
+
+.garland-bulb {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  animation: glow 2.6s infinite ease-in-out;
+}
+
+@keyframes glow {
+  0%,100% { opacity:.45 }
+  50% { opacity:1 }
+}
+
+/* ===== СНЕГ ===== */
+#snow { position: fixed; inset:0; width:100%; height:100vh; pointer-events:none; z-index:3; }
+
+
 /* ===== МЕССЕНДЖЕРЫ ===== */
 .messengers-section { margin-top:160px; padding:80px 20px; background:rgba(0,0,0,.2); color:#eaf2ff; position:relative; z-index:3; }
 .messengers-section h2 { text-align:center; margin-bottom:50px; }
@@ -159,6 +189,20 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
 <body>
 
 <canvas id="particles"></canvas>
+
+<!-- ===== ГИРЛЯНДА ===== -->
+<div class="garland">
+  <svg viewBox="0 0 1000 140" preserveAspectRatio="none">
+    <path id="garland-wire"
+      d="M0,70 C150,130 350,10 500,70 650,130 850,10 1000,70"
+      stroke="#222"
+      stroke-width="3"
+      fill="none"/>
+  </svg>
+</div>
+
+<!-- ===== СНЕГ ===== -->
+<canvas id="snow"></canvas>
 
 <div class="ui">
   <div class="title">
@@ -406,15 +450,15 @@ const downloadModal = document.getElementById('download-modal');
 
 const messengerLinks = {
   "Zapret": {
-    github: "https://github.com/Flowseal/zapret-discord-youtube",
+    github: "https://github.com/flowseal/zapret-discord-youtube/releases",
     fdroid: "",
     playmarket: "",
     appstore: "",
     microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
-    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "", download: "https://github.com/Flowseal/zapret-discord-youtube/releases", windows: "", linux: "", macos: ""
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "", download: "https://github.com/Flowseal/zapret-discord-youtube/releases/download/1.9.3/zapret-discord-youtube-1.9.3.zip", windows: "", linux: "", macos: ""
   },
   "ByeByeDPI": {
-    github: "https://github.com/romanvht/ByeByeDPI",
+    github: "https://github.com/romanvht/ByeByeDPI/releases",
     fdroid: "",
     playmarket: "",
     appstore: "",
@@ -426,14 +470,14 @@ const messengerLinks = {
     playmarket: "https://play.google.com/store/apps/details?id=org.amnezia.vpn",
     appstore: "https://apps.apple.com/us/app/amneziavpn/id1600529900",
     microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
-    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://amnezia.org/", download: "https://github.com/amnezia-vpn/amnezia-client/releases", windows: "", linux: "", macos: ""
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://amnezia.org/", download: "https://github.com/amnezia-vpn/amnezia-client/releases/download/4.8.11.4/AmneziaVPN_4.8.11.4_android9+_arm64-v8a.apk", windows: "", linux: "", macos: ""
   },
   "WGtunnel": {
     github: "https://github.com/wgtunnel/wgtunnel/releases", fdroid: "https://github.com/wgtunnel/fdroid?tab=readme-ov-file#apps",
     playmarket: "https://play.google.com/store/apps/details?id=com.zaneschepke.wireguardautotunnel",
     appstore: "",
     microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
-    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://wgtunnel.com/download", download: "https://github.com/wgtunnel/wgtunnel/releases", windows: "", linux: "", macos: ""
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://wgtunnel.com/download", download: "https://github.com/wgtunnel/wgtunnel/releases/download/4.2.2/wgtunnel-fdroid-v4.2.2-arm64.apk", windows: "", linux: "", macos: ""
   },
   "Portal WG": {
     github: "", fdroid: "",
@@ -443,18 +487,18 @@ const messengerLinks = {
     amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "", download: "https://github.com/bypasslibrary/new/releases/download/new/WG.Portal.apk", windows: "", linux: "", macos: ""
   },
   "Hiddify": {
-    github: "https://github.com/hiddify/hiddify-app", fdroid: "#",
+    github: "https://github.com/hiddify/hiddify-app/releases", fdroid: "#",
     playmarket: "https://play.google.com/store/apps/details?id=app.hiddify.com",
     appstore: "https://apps.apple.com/us/app/hiddify-proxy-vpn/id6596777532?platform=iphone",
     microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
-    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://hiddify.com/", download: "https://github.com/hiddify/hiddify-app/releases", windows: "", linux: "", macos: ""
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://hiddify.com/", download: "https://github.com/hiddify/hiddify-app/releases/download/v2.5.7/Hiddify-Android-universal.apk", windows: "", linux: "", macos: ""
   },
   "Happ": {
     github: "https://github.com/Happ-proxy/happ-android", fdroid: "",
     playmarket: "https://play.google.com/store/apps/details?id=com.happproxy",
     appstore: "https://apps.apple.com/us/app/happ-proxy-utility/id6504287215",
     microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
-    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://www.happ.su/main/ru", download: "https://github.com/Happ-proxy/happ-android/releases/", windows: "", linux: "", macos: ""
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://www.happ.su/main/ru", download: "https://github.com/Happ-proxy/happ-android/releases/latest/download/Happ.apk", windows: "", linux: "", macos: ""
   },
   "VPN Proxy Master": {
     github: "", fdroid: "",
@@ -478,11 +522,11 @@ const messengerLinks = {
     amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "now-vpn.com", download: "", windows: "", linux: "", macos: ""
   },
   "InviZible Pro": {
-    github: "https://github.com/Gedsh/InviZible", fdroid: "https://f-droid.org/packages/pan.alexander.tordnscrypt.stable",
+    github: "https://github.com/Gedsh/InviZible/releases", fdroid: "https://f-droid.org/packages/pan.alexander.tordnscrypt.stable",
     playmarket: "https://play.google.com/store/apps/details?id=pan.alexander.tordnscrypt.gp",
     appstore: "",
     microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
-    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://invizible.net", download: "https://github.com/Gedsh/InviZible/releases", windows: "", linux: "", macos: ""
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://invizible.net", download: "https://github.com/Gedsh/InviZible/releases/download/v2.6.3-beta/Invizible_Pro__beta_ver.2.6.3_arm64.apk", windows: "", linux: "", macos: ""
   },
   "Tor VPN": {
     github: "", fdroid: "",
@@ -499,11 +543,11 @@ const messengerLinks = {
     amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://www.torproject.org/download/", download: "https://github.com/bypasslibrary/new/releases/download/new/Tor.Browser.apk", windows: "", linux: "", macos: ""
   },
   "Onion Browser": {
-    github: "https://github.com/OnionBrowser/OnionBrowser", fdroid: "",
+    github: "https://github.com/OnionBrowser/OnionBrowser/releases", fdroid: "",
     playmarket: "",
     appstore: "https://apps.apple.com/us/app/onion-browser/id519296448",
     microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
-    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://onionbrowser.com/", download: "https://github.com/OnionBrowser/OnionBrowser/releases", windows: "", linux: "", macos: ""
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://onionbrowser.com/", download: "", windows: "", linux: "", macos: ""
   },
   "Outline": {
     github: "", fdroid: "",
@@ -513,11 +557,11 @@ const messengerLinks = {
     amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://getoutline.org/", download: "https://s3.amazonaws.com/outline-releases/client/android/stable/Outline-Client.apk", windows: "", linux: "", macos: ""
   },
   "NekoBox": {
-    github: "https://github.com/MatsuriDayo/NekoBoxForAndroid", fdroid: "#",
+    github: "https://github.com/MatsuriDayo/NekoBoxForAndroid/releases", fdroid: "#",
     playmarket: "",
     appstore: "",
     microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
-    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://matsuridayo.github.io/", download: "https://github.com/MatsuriDayo/NekoBoxForAndroid/releases", windows: "", linux: "", macos: ""
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://matsuridayo.github.io/", download: "https://github.com/MatsuriDayo/NekoBoxForAndroid/releases/download/1.4.1/NekoBox-1.4.1-arm64-v8a.apk", windows: "", linux: "", macos: ""
   },
   "v2RayTun": {
     github: "", fdroid: "",
@@ -575,41 +619,49 @@ for (const id in links) {
 
 document.querySelector('.modal-close').addEventListener('click', ()=>{ downloadModal.style.display='none'; });
 document.querySelector('.modal-backdrop').addEventListener('click', ()=>{ downloadModal.style.display='none'; });
+
+/* ===== ГИРЛЯНДА ===== */
+const wire = document.getElementById('garland-wire');
+const garland = document.querySelector('.garland');
+const colors = ['#ff3b3b','#ffd93b','#4dff88','#4dd2ff','#b84dff','#ff4da6'];
+const len = wire.getTotalLength();
+
+for(let i=0;i<26;i++){
+  const p = wire.getPointAtLength(len*(i/25));
+  const b = document.createElement('div');
+  const c = colors[Math.floor(Math.random()*colors.length)];
+  b.className='garland-bulb';
+  b.style.left=`calc(${p.x/10}% - 7px)`;
+  b.style.top=`${p.y}px`;
+  b.style.background=c;
+  b.style.boxShadow=`0 0 16px ${c}`;
+  b.style.animationDelay=Math.random()*2+'s';
+  garland.appendChild(b);
+}
+
+/* ===== СНЕГ ===== */
+const snow = document.getElementById('snow');
+const sctx = snow.getContext('2d');
+function resizeSnow(){ snow.width=innerWidth; snow.height=innerHeight; }
+addEventListener('resize',resizeSnow); resizeSnow();
+
+const flakes=[];
+for(let i=0;i<180;i++){
+  flakes.push({x:Math.random()*snow.width, y:Math.random()*snow.height, r:Math.random()*2.2+.6, vy:Math.random()*1.2+.5, vx:(Math.random()-.5)*.15});
+}
+
+(function snowDraw(){
+  sctx.clearRect(0,0,snow.width,snow.height);
+  sctx.fillStyle='rgba(255,255,255,.9)';
+  for(const f of flakes){
+    f.y+=f.vy; f.x+=f.vx;
+    if(f.y>snow.height){f.y=-5; f.x=Math.random()*snow.width;}
+    sctx.beginPath(); sctx.arc(f.x,f.y,f.r,0,Math.PI*2); sctx.fill();
+  }
+  requestAnimationFrame(snowDraw);
+})();
+
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
