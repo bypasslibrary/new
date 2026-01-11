@@ -50,6 +50,35 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
 .neon-btn:nth-of-type(2){animation-delay:.8s}
 .neon-btn:hover { box-shadow:0 0 35px rgba(120,180,255,.85), inset 0 0 18px rgba(120,180,255,.45); }
 
+/* ===== ГИРЛЯНДА ===== */
+.garland {
+  position: fixed;
+  top: -5px;
+  left: 0;
+  width: 100%;
+  height: 160px;
+  pointer-events: none;
+  z-index:4; /* выше UI */
+}
+
+.garland svg { width: 100%; height: 100%; }
+
+.garland-bulb {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  animation: glow 2.6s infinite ease-in-out;
+}
+
+@keyframes glow {
+  0%,100% { opacity:.45 }
+  50% { opacity:1 }
+}
+
+/* ===== СНЕГ ===== */
+#snow { position: fixed; inset:0; width:100%; height:100vh; pointer-events:none; z-index:3; }
+
 /* ===== МЕССЕНДЖЕРЫ ===== */
 .messengers-section { margin-top:160px; padding:80px 20px; background:rgba(0,0,0,.2); color:#eaf2ff; position:relative; z-index:3; }
 .messengers-section h2 { text-align:center; margin-bottom:50px; }
@@ -159,6 +188,20 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
 <body>
 
 <canvas id="particles"></canvas>
+
+<!-- ===== ГИРЛЯНДА ===== -->
+<div class="garland">
+  <svg viewBox="0 0 1000 140" preserveAspectRatio="none">
+    <path id="garland-wire"
+      d="M0,70 C150,130 350,10 500,70 650,130 850,10 1000,70"
+      stroke="#222"
+      stroke-width="3"
+      fill="none"/>
+  </svg>
+</div>
+
+<!-- ===== СНЕГ ===== -->
+<canvas id="snow"></canvas>
 
 <div class="ui">
   <div class="title">
@@ -283,16 +326,6 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
     <div class="messenger-desc">Анонимное, децентрализованное приложение для обмена личными сообщениями</div>
   </div>
 
-
-  <div class="messenger-item">
-    <img src="icontelemosk.png">
-    <div class="messenger-left">
-      <div class="messenger-name">Телемост</div>
-      <a class="download-btn" href="#">Download</a>
-    </div>
-    <div class="messenger-desc">Сервис для видеовстреч, подойдет тем у кого нету обхода</div>
-  </div>
-  
   <div class="messenger-item">
     <img src="iconzarchiver.png">
     <div class="messenger-left">
@@ -317,6 +350,7 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
   Нашли ошибку? Напишите: <a href="mailto:bypasslibrary@gmail.com">bypasslibrary@gmail.com</a>
 </div>
 
+<!-- МОДАЛЬНОЕ ОКНО -->
 <div id="download-modal">
   <div class="modal-backdrop"></div>
   <div class="modal-content">
@@ -426,42 +460,35 @@ const messengerLinks = {
     playmarket: "https://play.google.com/store/apps/details?id=com.bitchat.droid",
     appstore: "https://apps.apple.com/us/app/bitchat-mesh/id6748219622",
     microsoft: "", microsoftstore: "#", galaxystore: "", codeberg: "",
-    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://bitchat.free/", download: "https://github.com/permissionlesstech/bitchat-android/releases", windows: "", linux: "", macos: ""
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://bitchat.free/", download: "https://github.com/permissionlesstech/bitchat-android/releases/download/1.5.1/bitchat-1.5.1.apk", windows: "", linux: "", macos: ""
   },
   "Element": {
     github: "https://github.com/element-hq", fdroid: "https://f-droid.org/packages/io.element.android.x",
     playmarket: "https://play.google.com/store/apps/details?id=io.element.android.x",
     appstore: "https://apps.apple.com/app/id1631335820",
     microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
-    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://element.io/download#linux", download: "https://github.com/element-hq/element-x-android/releases", windows: "", linux: "", macos: ""
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://element.io/download#linux", download: "https://github.com/element-hq/element-x-android/releases/download/v25.12.0/app-fdroid-arm64-v8a-release-signed.apk", windows: "", linux: "", macos: ""
   },
   "DeltaChat": {
-    github: "https://github.com/deltachat", fdroid: "https://f-droid.org/app/com.b44t.messenger",
+    github: "https://github.com/deltachat/deltachat-android/releases", fdroid: "https://f-droid.org/app/com.b44t.messenger",
     playmarket: "https://play.google.com/store/apps/details?id=chat.delta",
     appstore: "https://apps.apple.com/us/app/delta-chat/id1459523234",
     microsoft: "https://apps.microsoft.com/detail/9pjtxx7hn3pk", microsoftstore: "", galaxystore: "", codeberg: "",
-    amazonstore: "", flathub: "https://flathub.org/apps/details/chat.delta.desktop", appgallery: "https://url.cloud.huawei.com/pXnbdjuOhW?shareTo=qrcode", webapp: "", snapstore: "", rustore: "", obtainium: "https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/{%22id%22:%22chat.delta%22,%22url%22:%22https://github.com/deltachat/deltachat-android%22,%22author%22:%22Delta%20Chat%20Contributors%22,%22name%22:%22Delta%20Chat%22,%22additionalSettings%22:%22{\%22about\%22:\%22Decentralized%20private%20messenger%20with%20chat-shared%20tools%20and%20games.\%22}%22}", offsite: "https://delta.chat/ru/download", download: "https://github.com/element-hq/element-x-android/releases", windows: "", linux: "", macos: ""
+    amazonstore: "", flathub: "https://flathub.org/apps/details/chat.delta.desktop", appgallery: "https://url.cloud.huawei.com/pXnbdjuOhW?shareTo=qrcode", webapp: "", snapstore: "", rustore: "", obtainium: "https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/{%22id%22:%22chat.delta%22,%22url%22:%22https://github.com/deltachat/deltachat-android%22,%22author%22:%22Delta%20Chat%20Contributors%22,%22name%22:%22Delta%20Chat%22,%22additionalSettings%22:%22{\%22about\%22:\%22Decentralized%20private%20messenger%20with%20chat-shared%20tools%20and%20games.\%22}%22}", offsite: "https://delta.chat/ru/download", download: "https://github.com/element-hq/element-x-android/releases/download/v25.12.0/app-fdroid-arm64-v8a-release-signed.apk", windows: "", linux: "", macos: ""
   },
   "Session": {
     github: "https://github.com/session-foundation", fdroid: "https://fdroid.getsession.org/",
     playmarket: "https://play.google.com/store/apps/details?id=network.loki.messenger",
     appstore: "https://apps.apple.com/us/app/session-private-messenger/id1470168868",
     microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
-    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://getsession.org/download", download: "https://github.com/session-foundation/session-android/releases", windows: "https://getsession.org/windows", linux: "https://getsession.org/linux", macos: "https://getsession.org/mac"
-  },
-  "Телемост": {
-    github: "", fdroid: "",
-    playmarket: "https://play.google.com/store/apps/details?id=ru.yandex.telemost",
-    appstore: "https://apps.apple.com/ru/app/id1527737302",
-    microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
-    amazonstore: "", flathub: "", appgallery: "https://appgallery.huawei.com/app/C104626069", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://360.yandex.ru/telemost/", download: "", windows: "https://telemost.yandex.ru/download-desktop", linux: "", macos: ""
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://getsession.org/download", download: "", windows: "https://getsession.org/windows", linux: "https://getsession.org/linux", macos: "https://getsession.org/mac"
   },
   "Zoom": {
     github: "", fdroid: "",
     playmarket: "https://play.google.com/store/apps/details?id=us.zoom.videomeetings",
     appstore: "https://itunes.apple.com/us/app/id546505307",
     microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
-    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://zoom.us/download", download: "https://zoom.us/client/latest/zoom.apk", windows: "https://zoom.us/download?os=win", linux: "https://zoom.us/download?os=linux", macos: "https://zoom.us/download?os=mac"
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", offsite: "https://zoom.us/download", download: "https://zoom.us/client/latest/zoom.apk", windows: "", linux: "https://getsession.org/linux", macos: "https://getsession.org/mac"
   },
   "Zarchiver": {
     github: "", fdroid: "",
@@ -512,32 +539,49 @@ for (const id in links) {
 // Закрытие модального окна
 document.querySelector('.modal-close').addEventListener('click', ()=>{ downloadModal.style.display='none'; });
 document.querySelector('.modal-backdrop').addEventListener('click', ()=>{ downloadModal.style.display='none'; });
+
+/* ===== ГИРЛЯНДА ===== */
+const wire = document.getElementById('garland-wire');
+const garland = document.querySelector('.garland');
+const colors = ['#ff3b3b','#ffd93b','#4dff88','#4dd2ff','#b84dff','#ff4da6'];
+const len = wire.getTotalLength();
+
+for(let i=0;i<26;i++){
+  const p = wire.getPointAtLength(len*(i/25));
+  const b = document.createElement('div');
+  const c = colors[Math.floor(Math.random()*colors.length)];
+  b.className='garland-bulb';
+  b.style.left=`calc(${p.x/10}% - 7px)`;
+  b.style.top=`${p.y}px`;
+  b.style.background=c;
+  b.style.boxShadow=`0 0 16px ${c}`;
+  b.style.animationDelay=Math.random()*2+'s';
+  garland.appendChild(b);
+}
+
+/* ===== СНЕГ ===== */
+const snow = document.getElementById('snow');
+const sctx = snow.getContext('2d');
+function resizeSnow(){ snow.width=innerWidth; snow.height=innerHeight; }
+addEventListener('resize',resizeSnow); resizeSnow();
+
+const flakes=[];
+for(let i=0;i<180;i++){
+  flakes.push({x:Math.random()*snow.width, y:Math.random()*snow.height, r:Math.random()*2.2+.6, vy:Math.random()*1.2+.5, vx:(Math.random()-.5)*.15});
+}
+
+(function snowDraw(){
+  sctx.clearRect(0,0,snow.width,snow.height);
+  sctx.fillStyle='rgba(255,255,255,.9)';
+  for(const f of flakes){
+    f.y+=f.vy; f.x+=f.vx;
+    if(f.y>snow.height){f.y=-5; f.x=Math.random()*snow.width;}
+    sctx.beginPath(); sctx.arc(f.x,f.y,f.r,0,Math.PI*2); sctx.fill();
+  }
+  requestAnimationFrame(snowDraw);
+})();
+
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
