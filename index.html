@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Neon Live Background</title>
 
-  <link rel="icon" href="favicon.png" type="image/png">
+<link rel="icon" href="favicon.png" type="image/png">
 
 <style>
 html, body {
@@ -13,7 +13,6 @@ html, body {
   padding: 0;
   width: 100%;
   overflow-x: hidden;
-  
   background: linear-gradient(270deg, #050505, #000b1a, #0a0014);
   background-size: 600% 600%;
   animation: neonFlow 14s ease infinite;
@@ -29,8 +28,10 @@ canvas {
   width: 100%;
   height: 100vh;
   pointer-events: none;
-  z-index: 0;
 }
+
+#particles { z-index: 0; }
+#snow { z-index: 1; }
 
 @keyframes neonFlow {
   0%{background-position:0% 50%}
@@ -38,6 +39,36 @@ canvas {
   100%{background-position:0% 50%}
 }
 
+/* ===== ГИРЛЯНДА ===== */
+.garland {
+  position: fixed;
+  top: -5px;
+  left: 0;
+  width: 100%;
+  height: 160px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.garland svg {
+  width: 100%;
+  height: 100%;
+}
+
+.garland-bulb {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  animation: glow 2.6s infinite ease-in-out;
+}
+
+@keyframes glow {
+  0%,100% { opacity:.45 }
+  50% { opacity:1 }
+}
+
+/* ===== UI ===== */
 .ui {
   display:flex;
   flex-direction:column;
@@ -45,7 +76,7 @@ canvas {
   gap:42px;
   padding-top:25vh;
   position:relative;
-  z-index:2;
+  z-index:3;
 }
 
 .title {
@@ -82,26 +113,19 @@ canvas {
   opacity:0;
   transform:translateY(30px);
   animation:fadeUp .9s ease forwards;
-  position:relative;
-  z-index:2;
 }
 
 .neon-btn:nth-of-type(1){animation-delay:.6s}
 .neon-btn:nth-of-type(2){animation-delay:.8s}
 
-.neon-btn:hover {
-  box-shadow:
-    0 0 35px rgba(120,180,255,.85),
-    inset 0 0 18px rgba(120,180,255,.45);
-}
-
+/* ===== VIDEO ===== */
 .video-section {
   margin-top:200px;
   display:flex;
   justify-content:center;
   padding:50px 0;
   position:relative;
-  z-index:2;
+  z-index:3;
 }
 
 video {
@@ -109,15 +133,10 @@ video {
   max-width:80%;
   max-height:60vh;
   border-radius:16px;
-  border:none;
-  outline:none;
   box-shadow:0 0 40px rgba(120,180,255,.6);
 }
 
-@media(max-width:768px){
-  video{width:90%;max-height:50vh}
-}
-
+/* ===== FAQ (ОРИГИНАЛ) ===== */
 .faq-section {
   padding:80px 20px;
   background:rgba(0,0,0,.2);
@@ -127,9 +146,7 @@ video {
   z-index:3;
 }
 
-.faq-item {
-  margin-top: 20px; /* промежуток между вопросами */
-}
+.faq-item { margin-top:20px; }
 
 .faq-question {
   font-size:1.2rem;
@@ -149,40 +166,27 @@ video {
   color:#bcd6ff;
 }
 
+/* ===== TELEGRAM ===== */
 .telegram-bot {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 30px 20px 10px;
-  text-align: center;
-
-  --glow-size: 13px;
-  --glow-power: 0.7;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  padding:30px 20px 10px;
+  text-align:center;
+  z-index:3;
 }
 
 .telegram-bot img {
-  width: 64px;
-  height: 64px;
-  filter:
-    drop-shadow(0 0 var(--glow-size)
-    rgba(120,180,255,var(--glow-power)));
-  transition: filter .3s ease;
-}
-
-.telegram-bot img:hover {
-  filter:
-    drop-shadow(0 0 calc(var(--glow-size) * 1.4)
-    rgba(120,180,255,1));
+  width:64px;
+  height:64px;
+  filter:drop-shadow(0 0 13px rgba(120,180,255,.7));
 }
 
 .telegram-bot a {
-  color: #eaf2ff;
-  font-weight: 600;
-  text-decoration: none;
-}
-.telegram-bot a:hover {
-  text-decoration: underline;
+  color:#eaf2ff;
+  font-weight:600;
+  text-decoration:none;
 }
 
 .footer-note {
@@ -194,10 +198,6 @@ video {
   position:relative;
   z-index:3;
 }
-.footer-note a {
-  color:#eaf2ff;
-  text-decoration:none;
-}
 
 @keyframes fadeUp {
   to {opacity:1;transform:none}
@@ -206,6 +206,19 @@ video {
 </head>
 
 <body>
+
+<!-- ===== ГИРЛЯНДА ===== -->
+<div class="garland">
+  <svg viewBox="0 0 1000 140" preserveAspectRatio="none">
+    <path id="garland-wire"
+      d="M0,70 C150,130 350,10 500,70 650,130 850,10 1000,70"
+      stroke="#222"
+      stroke-width="3"
+      fill="none"/>
+  </svg>
+</div>
+
+<canvas id="snow"></canvas>
 <canvas id="particles"></canvas>
 
 <div class="ui">
@@ -213,14 +226,9 @@ video {
     <div class="line1">Обход ограничений</div>
     <div class="line2">Свобода выбора</div>
   </div>
-  
-  <button class="neon-btn" onclick="location.href='messenger'">
-    Мессенджеры
-  </button>
 
-  <button class="neon-btn" onclick="location.href='bypass'">
-    Обходы
-  </button>
+  <button class="neon-btn" onclick="location.href='messenger'">Мессенджеры</button>
+  <button class="neon-btn" onclick="location.href='bypass'">Обходы</button>
 </div>
 
 <div class="video-section">
@@ -233,117 +241,118 @@ video {
   <h2>Часто задаваемые вопросы:</h2>
 
   <div class="faq-item">
-    <div class="faq-question">
-      Что делать, если не получается зайти на сайт для скачивания?
-    </div>
-    <div class="faq-answer">
-      Попробуйте зайти с VPN или подождите некоторое время — возможны технические работы.
-    </div>
+    <div class="faq-question">Что делать, если не получается зайти на сайт для скачивания?</div>
+    <div class="faq-answer">Попробуйте зайти с VPN или подождите некоторое время.</div>
   </div>
 
   <div class="faq-item">
-    <div class="faq-question">
-      Как установить приложение если файл формата apks или xapk?
-    </div>
-    <div class="faq-answer">
-      На сайте вы можете найти архиватор, который умеет открывать файлы таких форматов. Он находится внизу списков приложений.
-    </div>
+    <div class="faq-question">Как установить приложение если файл формата apks или xapk?</div>
+    <div class="faq-answer">Используйте архиватор из списка приложений.</div>
   </div>
 </div>
 
 <div class="telegram-bot">
   <a href="https://t.me/bypasslibraryBot" target="_blank">
-    <img src="favicon.png" alt="Telegram Bot">
+    <img src="favicon.png">
   </a>
-  <a href="https://t.me/bypasslibraryBot" target="_blank">
-    @bypasslibraryBot
-  </a>
+  <a href="https://t.me/bypasslibraryBot" target="_blank">@bypasslibraryBot</a>
 </div>
 
 <div class="footer-note">
-  Нашли ошибку? Напишите: <a href="mailto:bypasslibrary@gmail.com">bypasslibrary@gmail.com</a>
+  Нашли ошибку? Напишите:
+  <a href="mailto:bypasslibrary@gmail.com">bypasslibrary@gmail.com</a>
 </div>
 
 <script>
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
+/* ===== ГИРЛЯНДНЫЕ ОГОНЬКИ ===== */
+const wire = document.getElementById('garland-wire');
+const garland = document.querySelector('.garland');
+const colors = ['#ff3b3b','#ffd93b','#4dff88','#4dd2ff','#b84dff','#ff4da6'];
+const len = wire.getTotalLength();
 
-function resize(){
-  canvas.width=innerWidth;
-  canvas.height=innerHeight;
+for(let i=0;i<26;i++){
+  const p = wire.getPointAtLength(len*(i/25));
+  const b = document.createElement('div');
+  const c = colors[Math.floor(Math.random()*colors.length)];
+  b.className='garland-bulb';
+  b.style.left=`calc(${p.x/10}% - 7px)`;
+  b.style.top=`${p.y}px`;
+  b.style.background=c;
+  b.style.boxShadow=`0 0 16px ${c}`;
+  b.style.animationDelay=Math.random()*2+'s';
+  garland.appendChild(b);
 }
-addEventListener('resize',resize);
-resize();
+
+/* ===== СНЕГ ===== */
+const snow = document.getElementById('snow');
+const sctx = snow.getContext('2d');
+function resizeSnow(){ snow.width=innerWidth; snow.height=innerHeight; }
+addEventListener('resize',resizeSnow); resizeSnow();
+
+const flakes=[];
+for(let i=0;i<180;i++){
+  flakes.push({x:Math.random()*snow.width,y:Math.random()*snow.height,r:Math.random()*2.2+.6,vy:Math.random()*1.2+.5,vx:(Math.random()-.5)*.15});
+}
+
+(function snowDraw(){
+  sctx.clearRect(0,0,snow.width,snow.height);
+  sctx.fillStyle='rgba(255,255,255,.9)';
+  for(const f of flakes){
+    f.y+=f.vy; f.x+=f.vx;
+    if(f.y>snow.height){f.y=-5;f.x=Math.random()*snow.width;}
+    sctx.beginPath(); sctx.arc(f.x,f.y,f.r,0,Math.PI*2); sctx.fill();
+  }
+  requestAnimationFrame(snowDraw);
+})();
+
+/* ===== КУРСОР + ЧАСТИЦЫ ===== */
+const canvas=document.getElementById('particles');
+const ctx=canvas.getContext('2d');
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
+addEventListener('resize',resize); resize();
 
 const mouse={x:null,y:null,r:180};
-addEventListener('mousemove',e=>{
-  mouse.x=e.clientX;
-  mouse.y=e.clientY;
-});
-addEventListener('mouseleave',()=>{
-  mouse.x=null;
-  mouse.y=null;
-});
+addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
+addEventListener('mouseleave',()=>{mouse.x=null;mouse.y=null;});
 
 const particles=[];
 for(let i=0;i<120;i++){
-  particles.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    r:Math.random()*2+.6,
-    vx:(Math.random()-.5)*.3,
-    vy:(Math.random()-.5)*.3,
-    h:Math.random()*60+220
-  });
+  particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2+.6,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,h:Math.random()*60+220});
 }
 
-function draw(){
+(function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-
   if(mouse.x!==null){
-    const g=ctx.createRadialGradient(
-      mouse.x,mouse.y,0,
-      mouse.x,mouse.y,mouse.r
-    );
+    const g=ctx.createRadialGradient(mouse.x,mouse.y,0,mouse.x,mouse.y,mouse.r);
     g.addColorStop(0,'rgba(90,170,255,.25)');
     g.addColorStop(.5,'rgba(90,170,255,.12)');
     g.addColorStop(1,'rgba(90,170,255,0)');
-    ctx.fillStyle=g;
-    ctx.beginPath();
-    ctx.arc(mouse.x,mouse.y,mouse.r,0,Math.PI*2);
-    ctx.fill();
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(mouse.x,mouse.y,mouse.r,0,Math.PI*2); ctx.fill();
   }
-
   for(const p of particles){
     p.x+=p.vx; p.y+=p.vy;
     if(p.x<0||p.x>canvas.width)p.vx*=-1;
     if(p.y<0||p.y>canvas.height)p.vy*=-1;
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
     ctx.fillStyle=`hsla(${p.h},100%,70%,.85)`;
-    ctx.shadowBlur=16;
-    ctx.shadowColor=`hsla(${p.h},100%,70%,1)`;
+    ctx.shadowBlur=16; ctx.shadowColor=`hsla(${p.h},100%,70%,1)`;
     ctx.fill();
   }
   requestAnimationFrame(draw);
-}
-draw();
+})();
 
-/* FAQ — поддержка нескольких вопросов */
+/* ===== FAQ ===== */
 document.querySelectorAll('.faq-question').forEach(q=>{
   q.addEventListener('click',()=>{
-    const a = q.nextElementSibling;
-    if(!a) return;
-
+    const a=q.nextElementSibling;
     if(a.style.maxHeight){
-      a.style.maxHeight = null;
-      a.style.padding = '0 20px';
-    } else {
-      a.style.maxHeight = a.scrollHeight + 'px';
-      a.style.padding = '12px 20px';
+      a.style.maxHeight=null; a.style.padding='0 20px';
+    }else{
+      a.style.maxHeight=a.scrollHeight+'px'; a.style.padding='12px 20px';
     }
   });
 });
 </script>
+
 </body>
 </html>
