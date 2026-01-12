@@ -39,7 +39,7 @@ canvas {
   100%{background-position:0% 50%}
 }
 
-/* ===== ГИРЛЯНДА ===== */
+
 .garland {
   position: fixed;
   top: -5px;
@@ -68,7 +68,7 @@ canvas {
   50% { opacity:1 }
 }
 
-/* ===== UI ===== */
+
 .ui {
   display:flex;
   flex-direction:column;
@@ -118,7 +118,7 @@ canvas {
 .neon-btn:nth-of-type(1){animation-delay:.6s}
 .neon-btn:nth-of-type(2){animation-delay:.8s}
 
-/* ===== VIDEO ===== */
+
 .video-section {
   margin-top:200px;
   display:flex;
@@ -136,7 +136,7 @@ video {
   box-shadow:0 0 40px rgba(120,180,255,.6);
 }
 
-/* ===== FAQ (ОРИГИНАЛ) ===== */
+
 .faq-section {
   padding:80px 20px;
   background:rgba(0,0,0,.2);
@@ -166,7 +166,7 @@ video {
   color:#bcd6ff;
 }
 
-/* ===== TELEGRAM ===== */
+
 .telegram-bot {
   display:flex;
   flex-direction:column;
@@ -207,7 +207,7 @@ video {
 
 <body>
 
-<!-- ===== ГИРЛЯНДА ===== -->
+
 <div class="garland">
   <svg viewBox="0 0 1000 140" preserveAspectRatio="none">
     <path id="garland-wire"
@@ -264,7 +264,7 @@ video {
 </div>
 
 <script>
-/* ===== ГИРЛЯНДНЫЕ ОГОНЬКИ ===== */
+
 const wire = document.getElementById('garland-wire');
 const garland = document.querySelector('.garland');
 const colors = ['#ff3b3b','#ffd93b','#4dff88','#4dd2ff','#b84dff','#ff4da6'];
@@ -283,7 +283,7 @@ for(let i=0;i<26;i++){
   garland.appendChild(b);
 }
 
-/* ===== СНЕГ ===== */
+
 const snow = document.getElementById('snow');
 const sctx = snow.getContext('2d');
 function resizeSnow(){ snow.width=innerWidth; snow.height=innerHeight; }
@@ -305,7 +305,7 @@ for(let i=0;i<180;i++){
   requestAnimationFrame(snowDraw);
 })();
 
-/* ===== КУРСОР + ЧАСТИЦЫ ===== */
+
 const canvas=document.getElementById('particles');
 const ctx=canvas.getContext('2d');
 function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
@@ -341,7 +341,7 @@ for(let i=0;i<120;i++){
   requestAnimationFrame(draw);
 })();
 
-/* ===== FAQ ===== */
+
 document.querySelectorAll('.faq-question').forEach(q=>{
   q.addEventListener('click',()=>{
     const a=q.nextElementSibling;
