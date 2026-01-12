@@ -50,7 +50,7 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
 .neon-btn:nth-of-type(2){animation-delay:.8s}
 .neon-btn:hover { box-shadow:0 0 35px rgba(120,180,255,.85), inset 0 0 18px rgba(120,180,255,.45); }
 
-/* ===== ГИРЛЯНДА ===== */
+
 .garland {
   position: fixed;
   top: -5px;
@@ -58,7 +58,7 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
   width: 100%;
   height: 160px;
   pointer-events: none;
-  z-index:4; /* выше UI */
+  z-index:4;
 }
 
 .garland svg { width: 100%; height: 100%; }
@@ -76,11 +76,11 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
   50% { opacity:1 }
 }
 
-/* ===== СНЕГ ===== */
+
 #snow { position: fixed; inset:0; width:100%; height:100vh; pointer-events:none; z-index:3; }
 
 
-/* ===== МЕССЕНДЖЕРЫ ===== */
+
 .messengers-section { margin-top:160px; padding:80px 20px; background:rgba(0,0,0,.2); color:#eaf2ff; position:relative; z-index:3; }
 .messengers-section h2 { text-align:center; margin-bottom:50px; }
 .messenger-item { display:flex; align-items:center; gap:30px; max-width:1100px; margin:0 auto 35px; padding:25px; background:rgba(20,30,60,.35); border-radius:18px; backdrop-filter:blur(6px); }
@@ -91,16 +91,16 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
 .download-btn:hover { box-shadow:0 0 28px rgba(120,180,255,.85), inset 0 0 12px rgba(120,180,255,.45); }
 .messenger-desc { color:#bcd6ff; font-size:1.05rem; line-height:1.5; }
 
-/* ===== FAQ ===== */
+
 .faq-section { padding:80px 20px; background:rgba(0,0,0,.2); text-align:center; color:#eaf2ff; position:relative; z-index:3; }
 .faq-question { font-size:1.2rem; font-weight:600; padding:12px 20px; background:rgba(20,30,60,.35); border-radius:12px; cursor:pointer; display:inline-block; margin-top:20px; }
 .faq-answer { max-height:0; overflow:hidden; transition:.4s; padding:0 20px; color:#bcd6ff; }
 
-/* ===== FOOTER ===== */
+
 .footer-note { text-align:center; font-size:.9rem; color:#bcd6ff; opacity:.75; padding:40px 20px 30px; position:relative; z-index:3; }
 .footer-note a { color:#eaf2ff; text-decoration:none; }
 
-/* ===== MOBILE FIX ===== */
+
 @media (max-width: 768px) {
   .btn-row { flex-direction: column; align-items: center; width: 100%; }
   .neon-btn { width: 90%; max-width: 340px; padding: 18px 0; }
@@ -111,7 +111,7 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
 
 @keyframes fadeUp { to {opacity:1;transform:none} }
 
-/* ===== МОДАЛЬНОЕ ОКНО ===== */
+
 #download-modal { display:none; position: fixed; inset: 0; z-index: 9999; }
 .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(6px); }
 .modal-content { position: absolute; top:50%; left:50%; transform: translate(-50%, -50%); background: rgba(20,30,60,0.9); border-radius: 18px; padding: 40px 20px; text-align:center; color:#eaf2ff; max-width: 400px; width: 90%; }
@@ -119,18 +119,18 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
 #modal-name { font-size:1.4rem; font-weight:600; margin-bottom:12px; }
 .modal-text { font-size:1rem; margin-bottom:20px; }
 
-/* ===== ПЕРЕМЕННЫЕ ДЛЯ КНОПОК И ИКОНОК ===== */
+
 :root {
   --market-btn-width: 110px;
   --market-btn-height: 40px;
   --market-icon-width: 110px;
   --market-icon-height: 70px;
 
-  /* flex-позиционирование по умолчанию */
+
   --market-icon-justify: center;
   --market-icon-align: center;
 
-  /* цифровое смещение (по умолчанию центр) */
+
   --market-icon-top: 50%;
   --market-icon-left: 50%;
 }
@@ -157,7 +157,7 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
   transition: .25s ease;
   position: relative;
 
-  /* Шрифт как у кнопки Закрыть */
+  
   font-size: 1rem;
   font-weight: 500;
   font-family: inherit;
@@ -180,7 +180,7 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
   transform: translate(-50%, -50%);
 }
 
-/* Кнопка закрытия */
+
 .modal-close { padding: 10px 22px; font-size:1rem; color:#e6f2ff; border:2px solid rgba(120,180,255,.6); border-radius:12px; background:rgba(20,30,60,.35); cursor:pointer; }
 .modal-close:hover { box-shadow:0 0 28px rgba(120,180,255,.85), inset 0 0 12px rgba(120,180,255,.45); }
 </style>
@@ -190,7 +190,7 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
 
 <canvas id="particles"></canvas>
 
-<!-- ===== ГИРЛЯНДА ===== -->
+
 <div class="garland">
   <svg viewBox="0 0 1000 140" preserveAspectRatio="none">
     <path id="garland-wire"
@@ -201,7 +201,7 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
   </svg>
 </div>
 
-<!-- ===== СНЕГ ===== -->
+
 <canvas id="snow"></canvas>
 
 <div class="ui">
@@ -396,7 +396,7 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
   Нашли ошибку? Напишите: <a href="mailto:bypasslibrary@gmail.com">bypasslibrary@gmail.com</a>
 </div>
 
-<!-- МОДАЛЬНОЕ ОКНО -->
+
 <div id="download-modal">
   <div class="modal-backdrop"></div>
   <div class="modal-content">
@@ -430,7 +430,7 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
 </div>
 
 <script>
-// ===== PARTICLES BACKGROUND =====
+
 const canvas=document.getElementById('particles');
 const ctx=canvas.getContext('2d');
 function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
@@ -442,10 +442,10 @@ const particles=[];
 for(let i=0;i<120;i++){ particles.push({ x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*2+.6, vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3, h:Math.random()*60+220 }); }
 (function draw(){ ctx.clearRect(0,0,canvas.width,canvas.height); if(mouse.x){ const g=ctx.createRadialGradient(mouse.x,mouse.y,0,mouse.x,mouse.y,mouse.r); g.addColorStop(0,'rgba(90,170,255,.25)'); g.addColorStop(.5,'rgba(90,170,255,.12)'); g.addColorStop(1,'rgba(90,170,255,0)'); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(mouse.x,mouse.y,mouse.r,0,Math.PI*2); ctx.fill(); } for(const p of particles){ p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>canvas.width)p.vx*=-1; if(p.y<0||p.y>canvas.height)p.vy*=-1; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle=`hsla(${p.h},100%,70%,.85)`; ctx.shadowBlur=16; ctx.shadowColor=`hsla(${p.h},100%,70%,1)`; ctx.fill(); } requestAnimationFrame(draw); })();
 
-// ===== FAQ =====
+
 document.querySelectorAll('.faq-question').forEach(q=>{ q.onclick=()=>{ const a=q.nextElementSibling; const open=a.style.maxHeight; a.style.maxHeight=open?null:a.scrollHeight+'px'; a.style.padding=open?'0 20px':'12px 20px'; }; });
 
-// ===== DOWNLOAD MODAL =====
+
 const downloadModal = document.getElementById('download-modal');
 
 const messengerLinks = {
@@ -620,7 +620,7 @@ for (const id in links) {
 document.querySelector('.modal-close').addEventListener('click', ()=>{ downloadModal.style.display='none'; });
 document.querySelector('.modal-backdrop').addEventListener('click', ()=>{ downloadModal.style.display='none'; });
 
-/* ===== ГИРЛЯНДА ===== */
+
 const wire = document.getElementById('garland-wire');
 const garland = document.querySelector('.garland');
 const colors = ['#ff3b3b','#ffd93b','#4dff88','#4dd2ff','#b84dff','#ff4da6'];
@@ -639,7 +639,7 @@ for(let i=0;i<26;i++){
   garland.appendChild(b);
 }
 
-/* ===== СНЕГ ===== */
+
 const snow = document.getElementById('snow');
 const sctx = snow.getContext('2d');
 function resizeSnow(){ snow.width=innerWidth; snow.height=innerHeight; }
@@ -665,3 +665,4 @@ for(let i=0;i<180;i++){
 
 </body>
 </html>
+
