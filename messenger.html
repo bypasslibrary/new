@@ -118,6 +118,13 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
 #modal-name { font-size:1.4rem; font-weight:600; margin-bottom:12px; }
 .modal-text { font-size:1rem; margin-bottom:20px; }
 
+  .custom-underline {
+  text-decoration: underline;
+  text-decoration-color: #ff4757;    /* Цвет линии (например, красный) */
+  text-decoration-thickness: 3px;   /* Толщина линии */
+  text-underline-offset: 4px;       /* Расстояние от текста до линии */
+}
+
 
 :root {
   --market-btn-width: 110px;
@@ -332,7 +339,7 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
       <div class="messenger-name">Телемост</div>
       <a class="download-btn" href="#">Download</a>
     </div>
-    <div class="messenger-desc">Сервис для <strong>ОБЫЧНЫХ</strong> видеовстреч, подойдет тем у кого нету обхода</div>
+    <div class="messenger-desc">Сервис для <strong class="custom-underline">ОБЫЧНЫХ</strong> видеовстреч, подойдет тем у кого нету обхода</div>
   </div>
 
   <div class="messenger-item">
@@ -602,6 +609,7 @@ for(let i=0;i<180;i++){
 
 </body>
 </html>
+
 
 
 
