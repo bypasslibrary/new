@@ -118,11 +118,11 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: 
 #modal-name { font-size:1.4rem; font-weight:600; margin-bottom:12px; }
 .modal-text { font-size:1rem; margin-bottom:20px; }
 
-  .custom-underline {
-  text-decoration: underline;
-  text-decoration-color: #ff4757;    /* Цвет линии (например, красный) */
-  text-decoration-thickness: 3px;   /* Толщина линии */
-  text-underline-offset: 4px;       /* Расстояние от текста до линии */
+.custom-underline {
+  display: inline-block;             /* Важно для корректных отступов */
+  border-bottom: 2px solid #3498db;  /* Синяя сплошная линия */
+  line-height: 1;                    /* Убирает лишнее пространство сверху */
+  padding-bottom: 1px;               /* Тонкая настройка зазора */
 }
 
 
@@ -609,6 +609,7 @@ for(let i=0;i<180;i++){
 
 </body>
 </html>
+
 
 
 
