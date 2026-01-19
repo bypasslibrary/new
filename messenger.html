@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Messenger</title>
+
+  <link rel="icon" href="favicon.webp" type="image/webp">
+  
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  background: linear-gradient(270deg,#7f00ff,#00c6ff,#7f00ff);
+  background-size: 600% 600%;
+  animation: neonFlow 14s ease infinite;
+  font-family: sans-serif;
+  scrollbar-width: none;
+}
+body::-webkit-scrollbar { width: 0 }
+
+canvas { position: fixed; inset: 0; width: 100%; height: 100vh; pointer-events: none; z-index: 0; }
+
+@keyframes neonFlow { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+.ui { display:flex; flex-direction:column; align-items:center; gap:42px; padding-top:25vh; position:relative; z-index:2; }
+.title { text-align:center; opacity:0; transform:translateY(30px); animation:fadeUp .9s ease forwards .2s; }
+.title .line1 { font-size:2.6rem; font-weight:700; color:#eaf2ff; text-shadow:0 0 18px rgba(120,180,255,.7); }
+.title .line2 { font-size:1.6rem; color:#bcd6ff; }
+
+.btn-row { display:flex; gap:28px; }
+.neon-btn {
+  padding:22px 56px;
+  font-size:1.4rem;
+  font-weight:600;
+  color:#e6f2ff;
+  background:rgba(20,30,60,.35);
+  border:2px solid rgba(120,180,255,.6);
+  border-radius:18px;
+  cursor:pointer;
+  backdrop-filter:blur(8px);
+  box-shadow:0 0 20px rgba(120,180,255,.4), inset 0 0 12px rgba(120,180,255,.25);
+  opacity:0;
+  transform:translateY(30px);
+  animation:fadeUp .9s ease forwards;
+}
+.neon-btn:nth-of-type(1){animation-delay:.6s}
+.neon-btn:nth-of-type(2){animation-delay:.8s}
+.neon-btn:hover { box-shadow:0 0 35px rgba(120,180,255,.85), inset 0 0 18px rgba(120,180,255,.45); }
+
+
+.garland {
+  position: fixed;
+  top: -5px;
+  left: 0;
+  width: 100%;
+  height: 160px;
+  pointer-events: none;
+  z-index:4;
+}
+
+.garland svg { width: 100%; height: 100%; }
+
+.garland-bulb {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  animation: glow 2.6s infinite ease-in-out;
+}
+
+@keyframes glow {
+  0%,100% { opacity:.45 }
+  50% { opacity:1 }
+}
+
+
+#snow { position: fixed; inset:0; width:100%; height:100vh; pointer-events:none; z-index:3; }
+
+
+.messengers-section { margin-top:160px; padding:80px 20px; background:rgba(0,0,0,.2); color:#eaf2ff; position:relative; z-index:3; }
+.messengers-section h2 { text-align:center; margin-bottom:50px; }
+.messenger-item { display:flex; align-items:center; gap:30px; max-width:1100px; margin:0 auto 35px; padding:25px; background:rgba(20,30,60,.35); border-radius:18px; backdrop-filter:blur(6px); }
+.messenger-item img { width:72px; height:72px; object-fit:contain; flex-shrink:0; }
+.messenger-left { min-width:180px; }
+.messenger-name { font-size:1.2rem; font-weight:600; margin-bottom:10px; }
+.download-btn { display:inline-block; padding:10px 22px; font-size:.95rem; color:#e6f2ff; border:2px solid rgba(120,180,255,.6); border-radius:12px; text-decoration:none; box-shadow:0 0 14px rgba(120,180,255,.35), inset 0 0 8px rgba(120,180,255,.25); }
+.download-btn:hover { box-shadow:0 0 28px rgba(120,180,255,.85), inset 0 0 12px rgba(120,180,255,.45); }
+.messenger-desc { color:#bcd6ff; font-size:1.05rem; line-height:1.5; }
+
+
+.faq-section { padding:80px 20px; background:rgba(0,0,0,.2); text-align:center; color:#eaf2ff; position:relative; z-index:3; }
+.faq-question { font-size:1.2rem; font-weight:600; padding:12px 20px; background:rgba(20,30,60,.35); border-radius:12px; cursor:pointer; display:inline-block; margin-top:20px; }
+.faq-answer { max-height:0; overflow:hidden; transition:.4s; padding:0 20px; color:#bcd6ff; }
+
+
+.footer-note { text-align:center; font-size:.9rem; color:#bcd6ff; opacity:.75; padding:40px 20px 30px; position:relative; z-index:3; }
+.footer-note a { color:#eaf2ff; text-decoration:none; }
+
+
+@media (max-width: 768px) {
+  .btn-row { flex-direction: column; align-items: center; width: 100%; }
+  .neon-btn { width: 90%; max-width: 340px; padding: 18px 0; }
+  .messenger-item { flex-direction: column; align-items: flex-start; }
+  .messenger-left { margin-bottom: 15px; }
+  .messenger-desc { width: 100%; font-size: 1rem; line-height: 1.6; }
+}
+
+@keyframes fadeUp { to {opacity:1;transform:none} }
+
+
+#download-modal { display:none; position: fixed; inset: 0; z-index: 9999; }
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(6px); }
+.modal-content { position: absolute; top:50%; left:50%; transform: translate(-50%, -50%); background: rgba(20,30,60,0.9); border-radius: 18px; padding: 40px 20px; text-align:center; color:#eaf2ff; max-width: 400px; width: 90%; }
+.modal-content img { width: 72px; height:72px; object-fit: contain; margin-bottom: 16px; }
+#modal-name { font-size:1.4rem; font-weight:600; margin-bottom:12px; }
+.modal-text { font-size:1rem; margin-bottom:20px; }
+
+.custom-underline {
+  display: inline-block;             
+  border-bottom: 1px solid #abc1f3;  
+  line-height: 1;                    
+  padding-bottom: 1px;               
+}
+
+:root {
+  --market-btn-width: 110px;
+  --market-btn-height: 40px;
+  --market-icon-width: 110px;
+  --market-icon-height: 70px;
+
+  
+  --market-icon-justify: center;
+  --market-icon-align: center;
+
+  
+  --market-icon-top: 50%;
+  --market-icon-left: 50%;
+}
+
+.modal-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.modal-link {
+  width: var(--market-btn-width);
+  height: var(--market-btn-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(20,30,60,.35);
+  border-radius: 14px;
+  border: 2px solid rgba(120,180,255,.6);
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(120,180,255,.4), inset 0 0 12px rgba(120,180,255,.25);
+  transition: .25s ease;
+  position: relative;
+
+  
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+  color: #e6f2ff;
+  text-decoration: none;
+}
+
+.modal-link:hover {
+  box-shadow: 0 0 32px rgba(120,180,255,.9), inset 0 0 16px rgba(120,180,255,.45);
+}
+
+.modal-link img {
+  width: var(--market-icon-width);
+  height: var(--market-icon-height);
+  object-fit: contain;
+  pointer-events: none;
+  position: absolute;
+  top: var(--market-icon-top);
+  left: var(--market-icon-left);
+  transform: translate(-50%, -50%);
+}
+
+
+.modal-close { padding: 10px 22px; font-size:1rem; color:#e6f2ff; border:2px solid rgba(120,180,255,.6); border-radius:12px; background:rgba(20,30,60,.35); cursor:pointer; }
+.modal-close:hover { box-shadow:0 0 28px rgba(120,180,255,.85), inset 0 0 12px rgba(120,180,255,.45); }
+</style>
+</head>
+
+<body>
+
+<canvas id="particles"></canvas>
+
+
+<div class="garland">
+  <svg viewBox="0 0 1000 140" preserveAspectRatio="none">
+    <path id="garland-wire"
+      d="M0,70 C150,130 350,10 500,70 650,130 850,10 1000,70"
+      stroke="#222"
+      stroke-width="3"
+      fill="none"/>
+  </svg>
+</div>
+
+
+<canvas id="snow"></canvas>
+
+<div class="ui">
+  <div class="title">
+    <div class="line1">Мессенджеры</div>
+    <div class="line2">Свобода общения без ограничений</div>
+  </div>
+
+  <div class="btn-row">
+    <button class="neon-btn" onclick="location.href='index'">На главную</button>
+    <button class="neon-btn" onclick="location.href='bypass'">Обходы</button>
+  </div>
+</div>
+
+<div class="messengers-section">
+  <h2>Мессенджеры</h2>
+
+  <div class="messenger-item">
+    <img src="iconstelegram.webp">
+    <div class="messenger-left">
+      <div class="messenger-name">Telegram</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Быстрый облачный мессенджер с каналами, ботами и высокой устойчивостью к блокировкам.</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="iconssignal.webp">
+    <div class="messenger-left">
+      <div class="messenger-name">Signal</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Максимально защищённый мессенджер с end-to-end шифрованием.</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="iconswhatsapp.webp">
+    <div class="messenger-left">
+      <div class="messenger-name">WhatsApp</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Популярный мессенджер для личного общения и звонков.</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="icongemspace.webp">
+    <div class="messenger-left">
+      <div class="messenger-name">Gem Space</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Современный мессенджер с каналами, звонками и устойчивостью к блокировкам.</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="iconimo.webp">
+    <div class="messenger-left">
+      <div class="messenger-name">Imo</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Лёгкий мессенджер для чатов и видеозвонков.</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="iconbip.webp">
+    <div class="messenger-left">
+      <div class="messenger-name">Bip</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Международный мессенджер с чатами и звонками.</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="iconjami.webp">
+    <div class="messenger-left">
+      <div class="messenger-name">Jami</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Децентрализованный P2P-мессенджер без серверов.</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="iconbitchat.webp">
+    <div class="messenger-left">
+      <div class="messenger-name">Bitchat</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Анонимный мессенджер для независимого общения.</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="iconzoom.webp">
+    <div class="messenger-left">
+      <div class="messenger-name">Zoom</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Платформа для видеоконференций и удалённой работы.</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="iconelement.webp">
+    <div class="messenger-left">
+      <div class="messenger-name">Element</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Защищенный мессенджер с открытым исходным кодом, работающий на децентрализованном протоколе Matrix</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="icondeltachat.webp">
+    <div class="messenger-left">
+      <div class="messenger-name">DeltaChat</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Децентрализованный и безопасный мессенджер, работающий поверх email и имеющий сквозное шифрование</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="iconsession.webp">
+    <div class="messenger-left">
+      <div class="messenger-name">Session</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Анонимное, децентрализованное приложение для обмена личными сообщениями</div>
+  </div>
+
+    <div class="messenger-item">
+    <img src="icontelemosk.webp">
+    <div class="messenger-left">
+      <div class="messenger-name">Телемост</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Сервис для <strong class="custom-underline">обычных</strong> видеовстреч, подойдет тем у кого нету обхода</div>
+  </div>
+
+  <div class="messenger-item">
+    <img src="iconzarchiver.webp">
+    <div class="messenger-left">
+      <div class="messenger-name">Zarchiver</div>
+      <a class="download-btn" href="#">Download</a>
+    </div>
+    <div class="messenger-desc">Архиватор, инструмент для установки приложений различных расширений</div>
+  </div>
+</div>
+
+<div class="faq-section">
+  <h2>Часто задаваемые вопросы:</h2>
+
+  <div class="faq-question">Что делать, если не получается зайти на сайт для скачивания?</div>
+  <div class="faq-answer">Попробуйте зайти с VPN или подождите некоторое время — возможны технические работы.</div>
+
+  <div class="faq-question">Как установить приложение если файл формата apks или xapk?</div>
+  <div class="faq-answer">На сайте вы можете найти архиватор, который умеет открывать файлы таких форматов. Он находится внизу списков приложений.</div>
+</div>
+
+<div class="footer-note">
+  Нашли ошибку? Напишите: <a href="mailto:bypasslibrary@gmail.com">bypasslibrary@gmail.com</a>
+</div>
+
+
+<div id="download-modal">
+  <div class="modal-backdrop"></div>
+  <div class="modal-content">
+    <img id="modal-icon" src="" alt="Иконка" />
+    <div id="modal-name"></div>
+    <div class="modal-text">Выберите источник для скачивания:</div>
+    <div class="modal-links">
+      <a id="link-github" class="modal-link" href="#"><img src="github.webp"></a>
+      <a id="link-fdroid" class="modal-link" href="#"><img src="fdroid.webp"></a>
+      <a id="link-playmarket" class="modal-link" href="#"><img src="playmarket.webp"></a>
+      <a id="link-appstore" class="modal-link" href="#"><img src="appstore.webp"></a>
+      <a id="link-microsoft" class="modal-link" href="#"><img src="microsoft.webp"></a>
+      <a id="link-microsoftstore" class="modal-link" href="#"><img src="microsoftstore.webp"></a>
+      <a id="link-galaxystore" class="modal-link" href="#"><img src="galaxystore.webp"></a>
+      <a id="link-codeberg" class="modal-link" href="#"><img src="codeberg.webp"></a>
+      <a id="link-amazonstore" class="modal-link" href="#"><img src="amazonstore.webp"></a>
+      <a id="link-flathub" class="modal-link" href="#"><img src="flathub.webp"></a>
+      <a id="link-appgallery" class="modal-link" href="#"><img src="appgallery.webp"></a>
+      <a id="link-webapp" class="modal-link" href="#"><img src="webapp.webp"></a>
+      <a id="link-rustore" class="modal-link" href="#"><img src="rustore.webp"></a>
+      <a id="link-obtainium" class="modal-link" href="#"><img src="obtainium.webp"></a>
+      <a id="link-openstore" class="modal-link" href="#"><img src="openstore.webp"></a>
+      <a id="link-openapk" class="modal-link" href="#"><img src="openapk.webp"></a>
+      <a id="link-aptoide" class="modal-link" href="#"><img src="aptoide.webp"></a>
+      <a id="link-apkmirror" class="modal-link" href="#"><img src="apkmirror.webp"></a>
+      <a id="link-snapstore" class="modal-link" href="#"><img src="snapstore.webp"></a>
+      <a id="link-direct" class="modal-link" href="#"><img src="direct.webp"></a>
+      <a id="link-windows" class="modal-link" href="#" target="_blank">Windows</a>
+      <a id="link-linux" class="modal-link" href="#" target="_blank">Linux</a>
+      <a id="link-macos" class="modal-link" href="#" target="_blank">Mac</a>
+      <a id="link-android" class="modal-link" href="#" target="_blank">Android</a>
+      <a id="link-download" class="modal-link" href="#" target="_blank">Скачать</a>
+      <a id="link-offsite" class="modal-link" href="#" target="_blank">Офф сайт</a>
+    </div>
+    <button class="modal-close">Закрыть</button>
+  </div>
+</div>
+
+<script>
+
+const canvas=document.getElementById('particles');
+const ctx=canvas.getContext('2d');
+function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
+addEventListener('resize',resize); resize();
+const mouse={x:null,y:null,r:180};
+addEventListener('mousemove',e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
+addEventListener('mouseleave',()=>{ mouse.x=null; mouse.y=null; });
+const particles=[];
+for(let i=0;i<120;i++){ particles.push({ x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*2+.6, vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3, h:Math.random()*60+220 }); }
+(function draw(){ ctx.clearRect(0,0,canvas.width,canvas.height); if(mouse.x){ const g=ctx.createRadialGradient(mouse.x,mouse.y,0,mouse.x,mouse.y,mouse.r); g.addColorStop(0,'rgba(90,170,255,.25)'); g.addColorStop(.5,'rgba(90,170,255,.12)'); g.addColorStop(1,'rgba(90,170,255,0)'); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(mouse.x,mouse.y,mouse.r,0,Math.PI*2); ctx.fill(); } for(const p of particles){ p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>canvas.width)p.vx*=-1; if(p.y<0||p.y>canvas.height)p.vy*=-1; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle=`hsla(${p.h},100%,70%,.85)`; ctx.shadowBlur=16; ctx.shadowColor=`hsla(${p.h},100%,70%,1)`; ctx.fill(); } requestAnimationFrame(draw); })();
+
+
+document.querySelectorAll('.faq-question').forEach(q=>{ q.onclick=()=>{ const a=q.nextElementSibling; const open=a.style.maxHeight; a.style.maxHeight=open?null:a.scrollHeight+'px'; a.style.padding=open?'0 20px':'12px 20px'; }; });
+
+const downloadModal = document.getElementById('download-modal');
+
+const messengerLinks = {
+  "Telegram": {
+    github: "",
+    fdroid: "",
+    playmarket: "https://play.google.com/store/apps/details?id=org.telegram.messenger",
+    appstore: "https://apps.apple.com/app/telegram-messenger/id686449807",
+    microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
+    amazonstore: "", flathub: "", appgallery: "", webapp: "https://web.telegram.org/", snapstore: "", rustore: "", obtainium: "", openstore: "", openapk: "", apkmirror: "", aptoide: "", direct: "", offsite: "https://telegram.org/apps", android: "https://telegram.org/dl/android/apk", download: "", windows: "https://telegram.org/dl/desktop/win64", linux: "https://telegram.org/dl/desktop/linux", macos: "https://telegram.org/dl/desktop/mac"
+  },
+  "Signal": {
+    github: "https://github.com/signalapp",
+    fdroid: "https://f-droid.org/packages/org.thoughtcrime.securesms/",
+    playmarket: "https://play.google.com/store/apps/details?id=org.thoughtcrime.securesms",
+    appstore: "https://apps.apple.com/us/app/signal-private-messenger/id874139669",
+    microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", openstore: "", openapk: "", apkmirror: "", aptoide: "", direct: "", offsite: "https://signal.org/ru/download/", android: "https://signal.org/android/apk/", download: "", windows: "", linux: "", macos: ""
+  },
+  "WhatsApp": {
+    github: "",
+    fdroid: "",
+    playmarket: "https://play.google.com/store/apps/details?id=com.whatsapp",
+    appstore: "https://apps.apple.com/us/app/whatsapp-messenger/id310633997",
+    microsoft: "", microsoftstore: "https://get.microsoft.com/installer/download/9NKSQGP7F2NH?cid=website_cta_psi", galaxystore: "#", codeberg: "",
+    amazonstore: "", flathub: "", appgallery: "", webapp: "https://web.whatsapp.com/", snapstore: "", rustore: "", obtainium: "", openstore: "", openapk: "", apkmirror: "", aptoide: "", direct: "", offsite: "https://www.whatsapp.com/download", android: "https://www.whatsapp.com/android", download: "", windows: "", linux: "", macos: "https://web.whatsapp.com/desktop/mac_native/release/?configuration=Release"
+  },
+  "Gem Space": {
+    github: "", fdroid: "",
+    playmarket: "https://play.google.com/store/apps/details?id=com.gemtechnologies.gem4me",
+    appstore: "https://apps.apple.com/us/app/online-messenger-gem-space/id1032387040",
+    microsoft: "", microsoftstore: "", galaxystore: "https://galaxystore.samsung.com/detail/com.gemtechnologies.gem4me", codeberg: "",
+    amazonstore: "", flathub: "", appgallery: "https://appgallery.huawei.com/app/C102891939", webapp: "https://web.gemspace.com/", snapstore: "", rustore: "", obtainium: "", openstore: "", openapk: "", apkmirror: "", aptoide: "", direct: "", offsite: "https://gemspace.com/ru/product/bezopasnyy-korporativnyy-messendzher", android: "", download: "", windows: "", linux: "", macos: ""
+  },
+  "Imo": {
+    github: "", fdroid: "",
+    playmarket: "https://play.google.com/store/apps/details?id=com.imo.android.imoim",
+    appstore: "https://apps.apple.com/sg/app/imo-international-calls-chat/id336435697",
+    microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", openstore: "", openapk: "", apkmirror: "", aptoide: "", direct: "", offsite: "https://imo.im/log#android", android: "https://imo.im/log#android", download: "", windows: "https://imo.im/log#win", linux: "", macos: "https://imo.im/log#mac"
+  },
+  "Bip": {
+    github: "", fdroid: "",
+    playmarket: "hhttps://play.google.com/store/apps/details?id=com.turkcell.bip&hl=ru",
+    appstore: "https://apps.apple.com/tr/app/bip-mesajlaş-görüntülü-ara/id583274826?l=tr",
+    microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
+    amazonstore: "", flathub: "", appgallery: "https://appgallery.huawei.com/#/app/C101370911", webapp: "", snapstore: "", rustore: "", obtainium: "", openstore: "", openapk: "", apkmirror: "", aptoide: "", direct: "", offsite: "https://bip.com/tr/indir", android: "https://bit.ly/3VEDsG3", download: "", windows: "https://bip.com/newdesktop/BiP-win.zip", linux: "", macos: "https://bip.com/newdesktop/BiP-mac.zip"
+  },
+  "Jami": {
+    github: "https://git.jami.net/savoirfairelinux", fdroid: "https://f-droid.org/packages/cx.ring/",
+    playmarket: "https://play.google.com/store/apps/details?id=cx.ring",
+    appstore: "https://apps.apple.com/ca/app/jami/id1306951055",
+    microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", openstore: "", openapk: "", apkmirror: "", aptoide: "", direct: "", offsite: "https://jami.net/ru/download/", android: "", download: "", windows: "https://dl.jami.net/windows/jami.release.x64.msi", linux: "https://jami.net/ru/download-jami-linux/", macos: "https://dl.jami.net/mac_osx/jami.dmg"
+  },
+  "Bitchat": {
+    github: "https://github.com/permissionlesstech", fdroid: "",
+    playmarket: "https://play.google.com/store/apps/details?id=com.bitchat.droid",
+    appstore: "https://apps.apple.com/us/app/bitchat-mesh/id6748219622",
+    microsoft: "", microsoftstore: "#", galaxystore: "", codeberg: "",
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", openstore: "", openapk: "", apkmirror: "", aptoide: "", direct: "", offsite: "https://bitchat.free/", android: "https://github.com/permissionlesstech/bitchat-android/releases/download/1.7.0/app-universal-release.apk", download: "", windows: "", linux: "", macos: ""
+  },
+  "Element": {
+    github: "https://github.com/element-hq", fdroid: "https://f-droid.org/packages/io.element.android.x",
+    playmarket: "https://play.google.com/store/apps/details?id=io.element.android.x",
+    appstore: "https://apps.apple.com/app/id1631335820",
+    microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", openstore: "", openapk: "", apkmirror: "", aptoide: "", direct: "", offsite: "https://element.io/download", android: "https://github.com/element-hq/element-x-android/releases/download/v25.12.0/app-fdroid-arm64-v8a-release-signed.apk", download: "", windows: "https://packages.element.io/desktop/install/win32/x64/Element%20Setup.exe", linux: "https://element.io/download#linux", macos: "https://packages.element.io/desktop/install/macos/Element.dmg"
+  },
+  "DeltaChat": {
+    github: "https://github.com/deltachat/deltachat-android/releases", fdroid: "https://f-droid.org/app/com.b44t.messenger",
+    playmarket: "https://play.google.com/store/apps/details?id=chat.delta",
+    appstore: "https://apps.apple.com/us/app/delta-chat/id1459523234",
+    microsoft: "https://apps.microsoft.com/detail/9pjtxx7hn3pk", microsoftstore: "", galaxystore: "", codeberg: "",
+    amazonstore: "", flathub: "https://flathub.org/apps/details/chat.delta.desktop", appgallery: "https://url.cloud.huawei.com/pXnbdjuOhW?shareTo=qrcode", webapp: "", snapstore: "", rustore: "", obtainium: "https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/{%22id%22:%22chat.delta%22,%22url%22:%22https://github.com/deltachat/deltachat-android%22,%22author%22:%22Delta%20Chat%20Contributors%22,%22name%22:%22Delta%20Chat%22,%22additionalSettings%22:%22{\%22about\%22:\%22Decentralized%20private%20messenger%20with%20chat-shared%20tools%20and%20games.\%22}%22}", openstore: "", openapk: "", apkmirror: "", aptoide: "", direct: "", offsite: "https://delta.chat/ru/download", android: "https://github.com/deltachat/deltachat-android/releases/download/v2.35.0/deltachat-gplay-release-2.35.0.apk", download: "", windows: "", linux: "", macos: "https://apps.apple.com/us/app/delta-chat-desktop/id1462750497"
+  },
+  "Session": {
+    github: "https://github.com/session-foundation", fdroid: "https://fdroid.getsession.org/",
+    playmarket: "https://play.google.com/store/apps/details?id=network.loki.messenger",
+    appstore: "https://apps.apple.com/us/app/session-private-messenger/id1470168868",
+    microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", openstore: "", openapk: "", apkmirror: "", aptoide: "", direct: "", offsite: "https://getsession.org/download", android: "https://getsession.org/apk", download: "", windows: "https://getsession.org/windows", linux: "https://getsession.org/linux", macos: "https://getsession.org/mac"
+  },
+  "Телемост": {
+    github: "", fdroid: "",
+    playmarket: "https://play.google.com/store/apps/details?id=ru.yandex.telemost",
+    appstore: "https://apps.apple.com/ru/app/id1527737302",
+    microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
+    amazonstore: "", flathub: "", appgallery: "https://appgallery.huawei.com/app/C104626069", webapp: "", snapstore: "", rustore: "https://www.rustore.ru/catalog/app/ru.yandex.telemost", obtainium: "", openstore: "", openapk: "", apkmirror: "", aptoide: "", direct: "", offsite: "https://360.yandex.ru/telemost/", android: "", download: "", windows: "https://telemost.yandex.ru/download-desktop", linux: "", macos: ""
+  },
+  "Zoom": {
+    github: "", fdroid: "",
+    playmarket: "https://play.google.com/store/apps/details?id=us.zoom.videomeetings",
+    appstore: "https://itunes.apple.com/us/app/id546505307",
+    microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
+    amazonstore: "", flathub: "", appgallery: "", webapp: "", snapstore: "", rustore: "", obtainium: "", openstore: "", openapk: "", apkmirror: "", aptoide: "", direct: "", offsite: "https://zoom.us/download", android: "https://zoom.us/client/latest/zoom.apk", download: "", windows: "", linux: "", macos: ""
+  },
+  "Zarchiver": {
+    github: "", fdroid: "",
+    playmarket: "https://play.google.com/store/apps/details?id=ru.zdevs.zarchiver",
+    appstore: "",
+    microsoft: "", microsoftstore: "", galaxystore: "", codeberg: "",
+    amazonstore: "", flathub: "", appgallery: "https://appgallery1.huawei.com/#/app/C101456705", webapp: "", snapstore: "", rustore: "https://www.rustore.ru/catalog/app/ru.zdevs.zarchiver", obtainium: "", openstore: "", openapk: "", apkmirror: "", aptoide: "", direct: "", offsite: "https://zdevs.ru/", android: "", download: "https://zdevs.ru/files/za/ZArchiver_1_0_10_arm64-v8a_release.apk", windows: "", linux: "", macos: ""
+  }
+  
+};
+
+
+document.querySelectorAll('.download-btn').forEach(btn=>{
+  btn.addEventListener('click', e=>{
+    e.preventDefault();
+    const item = btn.closest('.messenger-item');
+    const icon = item.querySelector('img').src;
+    const name = item.querySelector('.messenger-name').textContent;
+
+    document.getElementById('modal-icon').src = icon;
+    document.getElementById('modal-name').textContent = name;
+
+
+const links = messengerLinks[name] || {};
+
+document.querySelectorAll('.modal-link').forEach(link => {
+  link.style.display = 'none';
+  link.removeAttribute('href');
+});
+
+for (const id in links) {
+  const url = links[id];
+  const linkEl = document.getElementById('link-' + id);
+
+  if (!linkEl) continue;
+
+
+  if (url && url !== '#' && url.trim() !== '') {
+    linkEl.href = url;
+    linkEl.style.display = 'flex';
+  }
+}
+
+    downloadModal.style.display='block';
+  });
+});
+
+
+document.querySelector('.modal-close').addEventListener('click', ()=>{ downloadModal.style.display='none'; });
+document.querySelector('.modal-backdrop').addEventListener('click', ()=>{ downloadModal.style.display='none'; });
+
+
+const wire = document.getElementById('garland-wire');
+const garland = document.querySelector('.garland');
+const colors = ['#ff3b3b','#ffd93b','#4dff88','#4dd2ff','#b84dff','#ff4da6'];
+const len = wire.getTotalLength();
+
+for(let i=0;i<26;i++){
+  const p = wire.getPointAtLength(len*(i/25));
+  const b = document.createElement('div');
+  const c = colors[Math.floor(Math.random()*colors.length)];
+  b.className='garland-bulb';
+  b.style.left=`calc(${p.x/10}% - 7px)`;
+  b.style.top=`${p.y}px`;
+  b.style.background=c;
+  b.style.boxShadow=`0 0 16px ${c}`;
+  b.style.animationDelay=Math.random()*2+'s';
+  garland.appendChild(b);
+}
+
+
+const snow = document.getElementById('snow');
+const sctx = snow.getContext('2d');
+function resizeSnow(){ snow.width=innerWidth; snow.height=innerHeight; }
+addEventListener('resize',resizeSnow); resizeSnow();
+
+const flakes=[];
+for(let i=0;i<180;i++){
+  flakes.push({x:Math.random()*snow.width, y:Math.random()*snow.height, r:Math.random()*2.2+.6, vy:Math.random()*1.2+.5, vx:(Math.random()-.5)*.15});
+}
+
+(function snowDraw(){
+  sctx.clearRect(0,0,snow.width,snow.height);
+  sctx.fillStyle='rgba(255,255,255,.9)';
+  for(const f of flakes){
+    f.y+=f.vy; f.x+=f.vx;
+    if(f.y>snow.height){f.y=-5; f.x=Math.random()*snow.width;}
+    sctx.beginPath(); sctx.arc(f.x,f.y,f.r,0,Math.PI*2); sctx.fill();
+  }
+  requestAnimationFrame(snowDraw);
+})();
+
+</script>
+
+</body>
+</html>
+
+
+
+
