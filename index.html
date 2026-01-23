@@ -316,7 +316,7 @@ const ctx=canvas.getContext('2d');
 function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
 addEventListener('resize',resize); resize();
 
-const mouse={x:null,y:null,r:180};
+const mouse={x:null,y:null,r:90};
 addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
 addEventListener('mouseleave',()=>{mouse.x=null;mouse.y=null;});
 
